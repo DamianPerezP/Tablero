@@ -1,0 +1,104 @@
+﻿body {
+	margin: 0;
+    padding: 0;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #666;
+    background: #f2f2f2;
+    font-size: 1em;
+}
+#boton{
+	margin:30px;
+	font-size:30px;
+	cursor:pointer;
+	float:left;
+	visibility: visible;
+}
+#main-header {
+    background: #333;
+    color: white;
+    width: 100%;
+    display: block;
+    position: fixed;
+	
+}  
+#logo
+	{
+	text-align: center;
+    margin: 0 auto;
+	 margin: 0 auto;
+ }
+.sidenav {
+      height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #FFFFFF;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+	border: 1px solid black;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.2s;
+}
+
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#main {
+    transition: margin-left .5s;
+
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+
+#cuadro1{
+    float: left;
+    width: 7%;
+    height: 2000px;
+    margin: 10px;
+    padding: 10px;
+
+
+ 
+}
+#cuadro2 {
+	float: left;
+    width: 100%;
+    height: 1000px;
+    padding-top: 110px;
+	transition: margin-left .5s;
+	
+}
+#drag1, #drag2, #drag3{
+	width:88px;
+	height:88px;
+	cursor:move;
+	opacity: 1;
+	-webkit-transition: .1s ease-in-out;
+	transition: .1s ease-in-out;
+}
+#drag1:hover, #drag2:hover, #drag3:hover{
+	opacity: .5;
+}

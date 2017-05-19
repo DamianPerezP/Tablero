@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+}
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="~/CSS/StyleSheet1.css">
+        <script src="~/JS/JavaScript.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <div id="main-header">
+                <div id="main">
+                    <span id="boton" onclick="openNav()">&#9776;</span>
+                    <div id="logo"><img src="~/Img/EasyBusinessLogo.png" /></div>
+                </div>
+
+            </div>
+        </header>
+
+        <div id="mySidenav" class="sidenav" ondragleave="return leave(event)">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+            <div class="foto" id="arrastrable1" draggable="true" ondragstart="start(event)" ondragend="end(event)">
+                <figure><img src="~/Img/Database.png" draggable="true" ondragstart="drag(event)" id="drag1"></figure>
+            </div>
+            <div class="foto" id="arrastrable1" draggable="true" ondragstart="start(event)" ondragend="end(event)">
+                <figure><img src="~/Img/Github.png" draggable="true" ondragstart="drag(event)" id="drag2"></figure>
+            </div>
+            <div class="foto" id="arrastrable1" draggable="true" ondragstart="start(event)" ondragend="end(event)">
+                <figure><img src="~/Img/Reloj.png" draggable="true" ondragstart="drag(event)" id="drag3"></figure>
+            </div>
+        </div>
+
+        <div id="cuadro2" ondragover="return over(event)" ondragleave="return leave(event)" ondrop="return clonar(event)">
+        </div>
+    </body>
+</html>
+

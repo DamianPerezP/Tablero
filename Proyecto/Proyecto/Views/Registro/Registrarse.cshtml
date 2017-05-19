@@ -1,0 +1,23 @@
+﻿@using Proyecto.Models
+@model Usuario
+@{
+    ViewBag.Title = "Registrarse";
+}
+
+<h2>Registrarse</h2>
+@using (Html.BeginForm("Registrarse", "Registro", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.Label("Ingrese Nombre de Uusario:") @Html.TextBoxFor(x => x.NombreUsuario);
+    @Html.ValidationMessageFor(x => x.NombreUsuario);<br />
+    @Html.Label("Ingrese Apellido:") @Html.TextBoxFor(x => x.Apellido);
+    @Html.ValidationMessageFor(x => x.Apellido);<br />
+    @Html.Label("Ingrese Nombre de Empresa:")@Html.TextBoxFor(x => x.NombreEmpresa);
+    @Html.ValidationMessageFor(x => x.NombreEmpresa);<br />
+    @Html.Label("Ingrese E-Mail:")@Html.TextBoxFor(x => x.Mail);
+    @Html.ValidationMessageFor(x => x.Mail);<br />
+    @Html.Label("Ingrese Contraseña:")@Html.PasswordFor(x => x.Contraseña);
+    @Html.ValidationMessageFor(x => x.Contraseña);<br />
+    <input type="submit" value="Agregar">
+}
+<h3>@ViewBag.mensaje</h3>
+<p> Para ir al Login haga click <a href=@Url.Action("Login","Registro") title="Ir Login" target="_blank">Aqui</a> <p />

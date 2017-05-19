@@ -1,0 +1,16 @@
+﻿@using Proyecto.Models
+@model Usuario
+@{
+    ViewBag.Title = "Inicio";
+}
+@using (Html.BeginForm("SubirArchivo", "Registro", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.Label("Ingrese su Base de Datos");<br />
+    @Html.Label("Ingrese Excel:")
+    <input type="file" name="file"/><br/>
+    @Html.ValidationMessageFor(x => x.BD);<br />
+    <h3>@ViewBag.mensaje</h3>
+    <input type="submit" value="Continuar"><br />
+}
+
+
