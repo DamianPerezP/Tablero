@@ -94,5 +94,9 @@ namespace Proyecto.Controllers
         {
             return View();
         }
+        public ActionResult Principal()
+        {
+            return View();
+        }
     }
 }

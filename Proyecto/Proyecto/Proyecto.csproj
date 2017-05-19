@@ -232,7 +232,10 @@
     <Content Include="Img\EasyBusinessLogo.png" />
     <Content Include="Img\Database.png" />
     <Content Include="Img\Reloj.png" />
+    <Content Include="JS\bootstrap.js" />
+    <Content Include="JS\bootstrap.min.js" />
     <Content Include="JS\JavaScript.js" />
+    <Content Include="JS\npm.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -294,6 +297,7 @@
     <Content Include="Views\Registro\Login.cshtml" />
     <Content Include="Views\Registro\Registrarse.cshtml" />
     <Content Include="Views\Registro\SubirArchivo.cshtml" />
+    <Content Include="Views\Registro\Principal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BD\" />

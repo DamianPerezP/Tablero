@@ -102,3 +102,22 @@
 #drag1:hover, #drag2:hover, #drag3:hover{
 	opacity: .5;
 }
+.uno{
+    display:block;
+    width: 100%;
+    background-color:aquamarine;
+    padding-bottom:100px;
+    padding-top:100px;
+    
+}
+#titulo{
+    font-size: 550%;
+    color:black;
+    font-weight: bold;
+}
+#subtitulo{
+    font-size:x-large;
+    color:black;
+    line-height: 1.17;
+    margin: 0 0 12px;
+}

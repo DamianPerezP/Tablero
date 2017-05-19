@@ -408,4 +408,3 @@ C:\Users\42252386\Desktop\Proyecto\Proyecto\bin\Microsoft.Owin.Security.Microsof
 C:\Users\42252386\Desktop\Proyecto\Proyecto\obj\Debug\Proyecto.csprojResolveAssemblyReference.cache
 C:\Users\42252386\Desktop\Proyecto\Proyecto\obj\Debug\Proyecto.dll
 C:\Users\42252386\Desktop\Proyecto\Proyecto\obj\Debug\Proyecto.pdb
-C:\Users\42252386\Desktop\Proyecto\Proyecto\bin\MySql.Data.dll
