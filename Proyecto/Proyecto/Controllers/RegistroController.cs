@@ -74,6 +74,7 @@ namespace Proyecto.Controllers
             Usuario NUsuario = new Usuario();
             string mail = TempData["Mail"].ToString();
             NUsuario = NUsuario.TraerUsuario(mail);
+            System.IO.File.Move(file.FileName,file.FileName + "-" + NUsuario.ID);
             string fileName = file.FileName;
             string FileExtension = fileName.Substring(fileName.LastIndexOf('.') + 1).ToLower();
                 if (file.ContentLength > 0 && file != null && (FileExtension == "xlsx" || FileExtension == "xlsm" || FileExtension == "xltx" || FileExtension == "xltm" || FileExtension == "xlam"))
@@ -91,10 +92,6 @@ namespace Proyecto.Controllers
             }
         }
         public ActionResult Inicio()
-        {
-            return View();
-        }
-        public ActionResult Principal()
         {
             return View();
         }

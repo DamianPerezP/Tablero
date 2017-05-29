@@ -4,17 +4,29 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
-
-
+    @Styles.Render("~/CSS/bootstrap.min.css")
+    @Styles.Render("~/CSS/StyleSheet1.css")
+   @Scripts.Render("~/JS/JavaScript.js") 
+    @Scripts.Render("~/JS/bootstrap.min.js")
+    
 </head>
 <body>
-    
+        <nav id="navp" class="navbar navbar-default navbar-fixed-top navbar-custom affix-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href=@Url.Action("Principal","Registro") title="EasyBusiness">
+                        <img class="navbar-brand" src="~/Img/EasyBusinessLogo.png">
+                    </a>
+                </div>
+            </div>
+        </nav>
+
 
         @RenderBody()
 
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
-</body>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+    </body>
 </html>

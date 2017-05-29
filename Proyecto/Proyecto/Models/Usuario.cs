@@ -7,7 +7,6 @@ using System.Data.OleDb;
 using Proyecto.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
-
 using MySql.Data.MySqlClient;
 
 
@@ -15,6 +14,7 @@ namespace Proyecto.Models
 {
     public class Usuario
     {
+        public int ID { get; set; }
         [Required(ErrorMessage = "El Nombre de Usuario es incorrecto")]
         public string NombreUsuario { get; set; }
         [Required(ErrorMessage = "El Apellido es incorrecto")]
@@ -27,12 +27,17 @@ namespace Proyecto.Models
         public string Contraseña { get; set; }
         public HttpPostedFile BD { get; set; }
         public string BaseDeDatos { get; set; }
-        private string NombreArchivo = "UsuarioASPN.mdb ";
-        private OleDbConnection nCon;
+        private string NombreArchivo = "2017-5-26 bdEasyBusiness.sql";
+        private MySqlConnection nCon;
         private void Conectar()
         {
-            string proovedor = @"Provider=Microsoft.Jet.OLEDB.4.0;  Data Source = |DataDirectory|" + NombreArchivo;
-            nCon = new OleDbConnection();
+            //string proovedor = "Server=" + "localhost" + ";" + "Database=" + NombreArchivo + ";" + "Uid=" + "root" + ";" + "Pwd=" + "ROOT" + ";";
+            string proovedor = String.Format ("Server={0};Database={1};Uid={2};Pwd={3};",
+                                                "localhost",
+                                                NombreArchivo, 
+                                                "root", 
+                                                "");
+            nCon = new MySqlConnection();
         nCon.ConnectionString = proovedor;
             nCon.Open();
             
@@ -44,14 +49,14 @@ namespace Proyecto.Models
             {
                 bool existe = false;
                 Conectar();
-                OleDbCommand Consulta = nCon.CreateCommand();
+                MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.StoredProcedure;
                 Consulta.CommandText = "Login";
-                OleDbParameter ParMail = new OleDbParameter("ParMail", Mail);
-                OleDbParameter ParContraseña = new OleDbParameter("ParContraseña", Contraseña);
+                MySqlParameter ParMail = new MySqlParameter("ParMail", Mail);
+                MySqlParameter ParContraseña = new MySqlParameter("ParContraseña", Contraseña);
                 Consulta.Parameters.Add(ParMail);
                 Consulta.Parameters.Add(ParContraseña);
-                OleDbDataReader drConsulta = Consulta.ExecuteReader();
+                MySqlDataReader drConsulta = Consulta.ExecuteReader();
 
                 if (drConsulta.HasRows == true)
                 {
@@ -75,18 +80,18 @@ namespace Proyecto.Models
             try
             {
                 Conectar();
-                OleDbCommand Consulta = nCon.CreateCommand();
+                MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.StoredProcedure;
                 Consulta.CommandText = "Registrar";
-                OleDbParameter ParNombreUsuario = new OleDbParameter("ParNombreUsuario", NombreUsuario);
+                MySqlParameter ParNombreUsuario = new MySqlParameter("ParNombreUsuario", NombreUsuario);
                 Consulta.Parameters.Add(ParNombreUsuario);
-                OleDbParameter ParApellido = new OleDbParameter("ParApellido", Apellido);
+                MySqlParameter ParApellido = new MySqlParameter("ParApellido", Apellido);
                 Consulta.Parameters.Add(ParApellido);
-                OleDbParameter ParMail = new OleDbParameter("ParMail", Mail);
+                MySqlParameter ParMail = new MySqlParameter("ParMail", Mail);
                 Consulta.Parameters.Add(ParMail);
-                OleDbParameter ParNombreEmpresa = new OleDbParameter("ParNombreEmpresa", NombreEmpresa);
+                MySqlParameter ParNombreEmpresa = new MySqlParameter("ParNombreEmpresa", NombreEmpresa);
                 Consulta.Parameters.Add(ParNombreEmpresa);
-                OleDbParameter ParContraseña = new OleDbParameter("ParContraseña", Contraseña);
+                MySqlParameter ParContraseña = new MySqlParameter("ParContraseña", Contraseña);
                 Consulta.Parameters.Add(ParContraseña);
                 Consulta.ExecuteNonQuery();
                 nCon.Close();
@@ -102,12 +107,12 @@ namespace Proyecto.Models
         {
             bool existe = false;
             Conectar();
-            OleDbCommand Consulta = nCon.CreateCommand();
+            MySqlCommand Consulta = nCon.CreateCommand();
             Consulta.CommandType = CommandType.StoredProcedure;
             Consulta.CommandText = "TraerBaseDeDatos";
-            OleDbParameter ParMail = new OleDbParameter("ParMail", Mail);
+            MySqlParameter ParMail = new MySqlParameter("ParMail", Mail);
             Consulta.Parameters.Add(ParMail);
-            OleDbDataReader drConsulta = Consulta.ExecuteReader();
+            MySqlDataReader drConsulta = Consulta.ExecuteReader();
 
             while (drConsulta.Read())
             {
@@ -124,12 +129,12 @@ namespace Proyecto.Models
         public void CrearBaseDeDatos()
         {
                 Conectar();
-                OleDbCommand Consulta = nCon.CreateCommand();
+                MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.StoredProcedure;
                 Consulta.CommandText = "CrearBD";
-                OleDbParameter ParBaseDeDatos = new OleDbParameter("ParBaseDeDatos", BaseDeDatos);
+            MySqlParameter ParBaseDeDatos = new MySqlParameter("ParBaseDeDatos", BaseDeDatos);
                 Consulta.Parameters.Add(ParBaseDeDatos);
-                OleDbParameter ParMail = new OleDbParameter("ParMail", Mail);
+            MySqlParameter ParMail = new MySqlParameter("ParMail", Mail);
                 Consulta.Parameters.Add(ParMail);
                 Consulta.ExecuteNonQuery();
                 nCon.Close();
@@ -138,16 +143,17 @@ namespace Proyecto.Models
         {
             Conectar();
             Usuario NUsu = new Usuario();
-            OleDbCommand consulta = nCon.CreateCommand();
+            MySqlCommand consulta = nCon.CreateCommand();
             consulta.CommandType = CommandType.StoredProcedure;
             consulta.CommandText = "TraerUsuario";
-            OleDbParameter ParMail = new OleDbParameter("ParMail", mail);
+            MySqlParameter ParMail = new MySqlParameter("ParMail", mail);
            consulta.Parameters.Add(ParMail);
             consulta.ExecuteNonQuery();
-            OleDbDataReader DrConsulta;
+            MySqlDataReader DrConsulta;
             DrConsulta = consulta.ExecuteReader();
             while (DrConsulta.Read())
             {
+                NUsu.ID = Convert.ToInt32(DrConsulta["IdUsuario"].ToString());
                 NUsu.NombreUsuario = DrConsulta["NombreUsuario"].ToString();
                 NUsu.Apellido = DrConsulta["Apellido"].ToString();
                 NUsu.Mail = DrConsulta["Mail"].ToString();
@@ -158,6 +164,5 @@ namespace Proyecto.Models
             nCon.Close();
             return NUsu;
         }
-
     }
 }

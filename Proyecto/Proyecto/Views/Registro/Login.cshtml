@@ -6,12 +6,11 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="~/CSS/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="~/CSS/Login.css">
    
 </head>
 <body>
-    <div class="container">
+    <div class="container-fluid">
             
             @using (Html.BeginForm("Login", "Registro", FormMethod.Post, new { @class = "form-signin", enctype = "multipart/form-data" }))
             {
@@ -21,7 +20,7 @@
                 @Html.PasswordFor(x => x.Contraseña, new { @class = "form-control", type = "password", name = "password", placeholder = "Contraseña", required = "",autofocus=""}) ;
                 @Html.ValidationMessageFor(x => x.Contraseña);
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button><br />
-                <p> Para registrarse haga click <a href=@Url.Action("Registrarse","Registro") title="Registrarse" target="_blank">Aqui</a> </p>
+                <p class="registr"> Para registrarse haga click <a href=@Url.Action("Registrarse","Registro") title="Registrarse" target="_blank">Aqui</a> </p>
             }
             <h3>@ViewBag.mensaje</h3>
             
