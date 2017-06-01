@@ -53,9 +53,9 @@ namespace Proyecto.Models
                 Consulta.CommandType = CommandType.StoredProcedure;
                 Consulta.CommandText = "Login";
                 MySqlParameter ParMail = new MySqlParameter("ParMail", Mail);
-                MySqlParameter ParContraseña = new MySqlParameter("ParContraseña", Contraseña);
+                MySqlParameter ParContrasena = new MySqlParameter("ParContrasena", Contraseña);
                 Consulta.Parameters.Add(ParMail);
-                Consulta.Parameters.Add(ParContraseña);
+                Consulta.Parameters.Add(ParContrasena);
                 MySqlDataReader drConsulta = Consulta.ExecuteReader();
 
                 if (drConsulta.HasRows == true)
@@ -91,8 +91,8 @@ namespace Proyecto.Models
                 Consulta.Parameters.Add(ParMail);
                 MySqlParameter ParNombreEmpresa = new MySqlParameter("ParNombreEmpresa", NombreEmpresa);
                 Consulta.Parameters.Add(ParNombreEmpresa);
-                MySqlParameter ParContraseña = new MySqlParameter("ParContraseña", Contraseña);
-                Consulta.Parameters.Add(ParContraseña);
+                MySqlParameter ParContrasena = new MySqlParameter("ParContrasena", Contraseña);
+                Consulta.Parameters.Add(ParContrasena);
                 Consulta.ExecuteNonQuery();
                 nCon.Close();
             }
