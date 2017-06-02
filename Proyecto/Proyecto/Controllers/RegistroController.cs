@@ -73,6 +73,7 @@ namespace Proyecto.Controllers
                     }
                      else
                     {
+                        
                        ViewBag.Usuario = NUsuario;
                        TempData["Mail"] = NUsuario.Mail;
                        return View("SubirArchivo");

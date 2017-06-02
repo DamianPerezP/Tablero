@@ -101,22 +101,66 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `BDEasyBusiness`.`Columnas` (
   `idColumnas` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
-  `IdGrafico` INT NOT NULL,
+  `idGrafico` INT NOT NULL,
   PRIMARY KEY (`idColumnas`),
-  INDEX `IdGrafico_idx` (`IdGrafico` ASC),
-  CONSTRAINT `IdGrafico`
-    FOREIGN KEY (`IdGrafico`)
+  INDEX `idGrafico_idx` (`idGrafico` ASC),
+  CONSTRAINT `idGrafico`
+    FOREIGN KEY (`idGrafico`)
     REFERENCES `BDEasyBusiness`.`GraficosModelos` (`idGrafico`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-DELIMITER $$
 
-CREATE PROCEDURE `CrearBD` ()
+DROP PROCEDURE IF EXISTS CrearBD;
+DROP PROCEDURE IF EXISTS Registrar;
+DROP PROCEDURE IF EXISTS Login;
+DROP PROCEDURE IF EXISTS TraerBaseDeDatos;
+DROP PROCEDURE IF EXISTS TraerUsuario;
+
+DELIMITER $$
+CREATE PROCEDURE CrearBD()
 BEGIN
-UPDATE usuarios SET BaseDeDatos = @ParBaseDeDatos
-WHERE Mail = @ParMail;
+UPDATE `usuarios` SET `BaseDeDatos` = 'ParBaseDeDatos'
+WHERE `Mail` = 'ParMail';
 END
+$$
+
+DELIMITER $$
+CREATE PROCEDURE Registrar()
+BEGIN
+INSERT INTO `usuarios` ( `NombreUsuario`, `Apellido`, `Mail`, `NombreEmpresa`, `Contraseña` )
+VALUES ('ParNombreUsuario', 'ParApellido', 'ParMail', 'ParNombreEmpresa', 'ParContrasena');
+END
+$$
+
+DELIMITER $$
+CREATE PROCEDURE Login()
+BEGIN
+SELECT `Mail`
+FROM `usuarios`
+WHERE `Mail` = 'ParMail' AND Contraseña = 'ParContrasena';
+END
+$$
+
+DELIMITER $$
+CREATE PROCEDURE TraerBaseDeDatos()
+BEGIN
+SELECT `BaseDeDatos`
+FROM `usuarios`
+WHERE `Mail` = 'ParMail';
+END
+$$
+
+DELIMITER $$
+CREATE PROCEDURE TraerUsuario()
+BEGIN
+SELECT *
+FROM `usuarios`
+WHERE `Mail` = 'ParMaiil';
+END
+$$
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

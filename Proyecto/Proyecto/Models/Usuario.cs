@@ -29,7 +29,7 @@ namespace Proyecto.Models
         public string ReContraseña { get; set; }
         public HttpPostedFile BD { get; set; }
         public string BaseDeDatos { get; set; }
-        private string NombreArchivo = "2017-5-26 bdEasyBusiness.sql";
+        private string NombreArchivo = "bdeasybusiness";
         private MySqlConnection nCon;
         private void Conectar()
         {
@@ -45,57 +45,68 @@ namespace Proyecto.Models
             
         }
         //Loguearse
-        public bool Login(out string mensaje)
+        public bool Login()
         {
-            try
-            {
                 bool existe = false;
-                Conectar();
-                MySqlCommand Consulta = nCon.CreateCommand();
-                Consulta.CommandType = CommandType.StoredProcedure;
-                Consulta.CommandText = "Login";
-                MySqlParameter ParMail = new MySqlParameter("ParMail", Mail);
-                MySqlParameter ParContrasena = new MySqlParameter("ParContrasena", Contraseña);
-                Consulta.Parameters.Add(ParMail);
-                Consulta.Parameters.Add(ParContrasena);
-                MySqlDataReader drConsulta = Consulta.ExecuteReader();
+                string strSQL = "";
+                    Conectar();
 
-                if (drConsulta.HasRows == true)
-                {
+                    MySqlCommand Consulta = nCon.CreateCommand();
+                    Consulta.CommandType = CommandType.Text;
+                    strSQL += "SELECT `Mail`";
+                    strSQL += "FROM `USUARIOS`";
+                    strSQL += " WHERE `Mail` = "+Mail+ "AND `Contraseña` = "+Contraseña+"";
+                    Consulta.CommandText = strSQL;
+                    MySqlDataReader drCon = Consulta.ExecuteReader();
+                    if (drCon.HasRows == true)
+                    {
                     existe = true;
-                }
-                mensaje = "";
+                    }
                 nCon.Close();
                 return existe;
-            }
-            catch (Exception exc)
-            {
-                mensaje = exc.Message;
-                return false;
-            }
             }
            
         //Se Registra
         public string Registro()
         {
+            int intRegsAffected = 0;
+            string strSQL = "";
             string mensaje = "";
             try
             {
                 Conectar();
+
                 MySqlCommand Consulta = nCon.CreateCommand();
-                Consulta.CommandType = CommandType.StoredProcedure;
-                Consulta.CommandText = "Registrar";
-                MySqlParameter ParNombreUsuario = new MySqlParameter("ParNombreUsuario", NombreUsuario);
-                Consulta.Parameters.Add(ParNombreUsuario);
-                MySqlParameter ParApellido = new MySqlParameter("ParApellido", Apellido);
-                Consulta.Parameters.Add(ParApellido);
-                MySqlParameter ParMail = new MySqlParameter("ParMail", Mail);
-                Consulta.Parameters.Add(ParMail);
-                MySqlParameter ParNombreEmpresa = new MySqlParameter("ParNombreEmpresa", NombreEmpresa);
-                Consulta.Parameters.Add(ParNombreEmpresa);
-                MySqlParameter ParContrasena = new MySqlParameter("ParContrasena", Contraseña);
-                Consulta.Parameters.Add(ParContrasena);
-                Consulta.ExecuteNonQuery();
+                Consulta.CommandType = CommandType.Text;
+                strSQL += "INSERT INTO `bdeasybusiness`.`usuarios`";
+                strSQL += " (`Mail`, `NombreUsuario`, `ApellidoUsuario`, `NombreEmpresa`, `Contraseña`, `BaseDeDatos`,  `FechaBD`)";
+                strSQL += " VALUES";
+                //strSQL += " ('"+ this.Mail + "', '"+ this.NombreUsuario + "', '"+ this.Apellido +"', '"+this.NombreEmpresa + "', '"+ this.Contraseña + "', 'aaa', '2012/05/02'); ";
+                strSQL += String.Format( " ('{0}', '{1}', '{2}', '{3}', '{4}', '', ''); ",
+                    this.Mail,
+                    this.NombreUsuario,
+                    this.Apellido,
+                    this.NombreEmpresa,
+                    this.Contraseña);
+
+                Consulta.CommandText = strSQL;
+                intRegsAffected = Consulta.ExecuteNonQuery();
+
+
+                //MySqlCommand Consulta = nCon.CreateCommand();
+                //Consulta.CommandType = CommandType.StoredProcedure;
+                //Consulta.CommandText = "Registrar";
+                //MySqlParameter ParNombreUsuario = new MySqlParameter("ParNombreUsuario", NombreUsuario);
+                //Consulta.Parameters.Add(ParNombreUsuario);
+                //MySqlParameter ParApellido = new MySqlParameter("ParApellido", Apellido);
+                //Consulta.Parameters.Add(ParApellido);
+                //MySqlParameter ParMail = new MySqlParameter("ParMail", Mail);
+                //Consulta.Parameters.Add(ParMail);
+                //MySqlParameter ParNombreEmpresa = new MySqlParameter("ParNombreEmpresa", NombreEmpresa);
+                //Consulta.Parameters.Add(ParNombreEmpresa);
+                //MySqlParameter ParContrasena = new MySqlParameter("ParContrasena", Contraseña);
+                //Consulta.Parameters.Add(ParContrasena);
+                //Consulta.ExecuteNonQuery();
                 nCon.Close();
             }
             catch (Exception Error)
