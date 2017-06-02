@@ -25,6 +25,8 @@ namespace Proyecto.Models
         public string NombreEmpresa { get; set; }
         [Required(ErrorMessage = "La contraseña es incorrecta")]
         public string Contraseña { get; set; }
+        [Required(ErrorMessage = "La confrimación de contraseña es incorrecta")]
+        public string ReContraseña { get; set; }
         public HttpPostedFile BD { get; set; }
         public string BaseDeDatos { get; set; }
         private string NombreArchivo = "2017-5-26 bdEasyBusiness.sql";

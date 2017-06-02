@@ -52,17 +52,34 @@ namespace Proyecto.Controllers
             Usuario NUsuario = new Usuario();
             NUsuario = NUsuario2;
             string mensaje = NUsuario.Registro();
-            if (mensaje == "" && NUsuario.Mail.Contains('@') && NUsuario.Mail.Contains('.'))
-            {
-                ViewBag.Usuario = NUsuario;
-                TempData["Mail"] = NUsuario.Mail;
-                return View("SubirArchivo");
-            }
-            else
+            if (mensaje != "")
             {
                 ViewBag.mensaje = mensaje;
                 return View();
             }
+            else
+            {
+                if (NUsuario.Mail.Contains('@') == false && NUsuario.Mail.Contains('.') == false)
+                {
+                    ViewBag.mensaje = "Ingrese un Mail válido";
+                    return View();
+                }
+                else
+                {
+                    if (NUsuario2.Contraseña == NUsuario2.ReContraseña)
+                    {
+                        ViewBag.mensaje = "Ingrese dos contraseñas iguales";
+                        return View();
+                    }
+                     else
+                    {
+                       ViewBag.Usuario = NUsuario;
+                       TempData["Mail"] = NUsuario.Mail;
+                       return View("SubirArchivo");
+            }
+                }
+            }
+           
         }
         public ActionResult SubirArchivo()
         {
