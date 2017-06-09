@@ -1,0 +1,5 @@
+Restricciones: Normal vs. Premium
+1 archivo --> 50 kb max c/u VS 3 archivos --> 200 kb max c/u
+1 solo tablero c/ hasta 4 graficos VS 3 tableros c/hasta 10 graficos c/u
+3 diferentes graficos para usar VS todos los graficos disponibles
+No tiene posibilidad de notificaciones VS tiene funcionalidad de notificaciones

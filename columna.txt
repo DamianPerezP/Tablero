@@ -1,0 +1,6 @@
+-Tableros
+-Base de datos
+-Tipos de graficos
+-info de easybusiness
+-estado(usuario)
+-configuracion(notificaciones, upgrade, etc.) 
