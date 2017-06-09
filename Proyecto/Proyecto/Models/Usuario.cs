@@ -45,33 +45,39 @@ namespace Proyecto.Models
             
         }
         //Loguearse
-        public bool Login()
-        {
+        public bool Login(ref string mens)
+        {       
+
                 bool existe = false;
                 string strSQL = "";
-                    Conectar();
-
-                    MySqlCommand Consulta = nCon.CreateCommand();
-                    Consulta.CommandType = CommandType.Text;
-                    strSQL += "SELECT `Mail`";
-                    strSQL += "FROM `USUARIOS`";
-                    strSQL += " WHERE `Mail` = "+Mail+ "AND `Contraseña` = "+Contraseña+"";
-                    Consulta.CommandText = strSQL;
-                    MySqlDataReader drCon = Consulta.ExecuteReader();
-                    if (drCon.HasRows == true)
-                    {
+            try
+            {
+                Conectar();
+                MySqlCommand Consulta = nCon.CreateCommand();
+                Consulta.CommandType = CommandType.Text;
+                strSQL += "SELECT `Mail`";
+                strSQL += "FROM `USUARIOS`";
+                strSQL += " WHERE `Mail` = " + Mail + "AND `Contraseña` = " + Contraseña + "";
+                Consulta.CommandText = strSQL;
+                MySqlDataReader drCon = Consulta.ExecuteReader();
+                if (drCon.HasRows == true)
+                {
                     existe = true;
-                    }
+                }
                 nCon.Close();
-                return existe;
+               
+            }
+            catch (Exception exc)
+            {
+                mens = "\n" + exc.Message;
+            } return existe;
             }
            
         //Se Registra
-        public string Registro()
+        public string Registro(ref string mensaje)
         {
             int intRegsAffected = 0;
             string strSQL = "";
-            string mensaje = "";
             try
             {
                 Conectar();
@@ -111,70 +117,91 @@ namespace Proyecto.Models
             }
             catch (Exception Error)
             {
-                mensaje = Error.Message.ToString();
+                mensaje = "\n" + Error.Message.ToString();
             }
             nCon.Close();
             return mensaje;
         }
-        public bool HayDB()
+
+        public bool HayDB(ref string mens)
         {
             bool existe = false;
-            Conectar();
-            MySqlCommand Consulta = nCon.CreateCommand();
-            Consulta.CommandType = CommandType.StoredProcedure;
-            Consulta.CommandText = "TraerBaseDeDatos";
-            MySqlParameter ParMail = new MySqlParameter("ParMail", Mail);
-            Consulta.Parameters.Add(ParMail);
-            MySqlDataReader drConsulta = Consulta.ExecuteReader();
-
-            while (drConsulta.Read())
+            string strSQL = "";
+            try
             {
-                string Bd = drConsulta["BaseDeDatos"].ToString();
-                if (Bd.Length > 1)
+                Conectar();
+
+                MySqlCommand Consulta = nCon.CreateCommand();
+                Consulta.CommandType = CommandType.Text;
+                strSQL += "SELECT `BaseDeDatos`";
+                strSQL += "FROM `usuarios`";
+                strSQL += "WHERE `Mail` = " + Mail + ";";
+                Consulta.CommandText = strSQL;
+                MySqlDataReader drCon = Consulta.ExecuteReader();
+                if (drCon.HasRows == true)
                 {
                     existe = true;
                 }
-            }
+                nCon.Close();
 
-            nCon.Close();
+            }
+            catch (Exception exc)
+            {
+                mens = "\n" + exc.Message;
+            }
             return existe;
         }
-        public void CrearBaseDeDatos()
+        public void CrearBaseDeDatos(ref string mens)
         {
+            int intRegsAffected = 0;
+            string strSQL = "";
+            try
+            {
+                Conectar();
+
+                MySqlCommand Consulta = nCon.CreateCommand();
+                Consulta.CommandType = CommandType.Text;
+                strSQL += "UPDATE `usuarios`";
+                strSQL += "SET `BaseDeDatos` = " + BaseDeDatos;
+                strSQL += "WHERE `Mail` = " + Mail + ";";
+                Consulta.CommandText = strSQL;
+                intRegsAffected = Consulta.ExecuteNonQuery();
+            }
+            catch (Exception exc)
+            {
+                mens = "\n" + exc.Message;
+            }
+            }
+        public Usuario TraerUsuario(ref string mens)
+        {
+            Usuario NUsu = new Usuario();
+            string strSQL = "";
+            try
+            {
                 Conectar();
                 MySqlCommand Consulta = nCon.CreateCommand();
-                Consulta.CommandType = CommandType.StoredProcedure;
-                Consulta.CommandText = "CrearBD";
-            MySqlParameter ParBaseDeDatos = new MySqlParameter("ParBaseDeDatos", BaseDeDatos);
-                Consulta.Parameters.Add(ParBaseDeDatos);
-            MySqlParameter ParMail = new MySqlParameter("ParMail", Mail);
-                Consulta.Parameters.Add(ParMail);
-                Consulta.ExecuteNonQuery();
+                Consulta.CommandType = CommandType.Text;
+                strSQL += "SELECT `*`";
+                strSQL += "FROM `usuarios`";
+                strSQL += " WHERE `Mail` = " + Mail + ";";
+                Consulta.CommandText = strSQL;
+                MySqlDataReader DrConsulta = Consulta.ExecuteReader();
+                while (DrConsulta.Read())
+                {
+                    NUsu.ID = Convert.ToInt32(DrConsulta["IdUsuario"].ToString());
+                    NUsu.NombreUsuario = DrConsulta["NombreUsuario"].ToString();
+                    NUsu.Apellido = DrConsulta["Apellido"].ToString();
+                    NUsu.Mail = DrConsulta["Mail"].ToString();
+                    NUsu.NombreEmpresa = DrConsulta["NombreEmpresa"].ToString();
+                    NUsu.Contraseña = DrConsulta["Contraseña"].ToString();
+                    NUsu.BaseDeDatos = DrConsulta["BaseDeDatos"].ToString();
+                }
                 nCon.Close();
-        }
-        public Usuario TraerUsuario(string mail)
-        {
-            Conectar();
-            Usuario NUsu = new Usuario();
-            MySqlCommand consulta = nCon.CreateCommand();
-            consulta.CommandType = CommandType.StoredProcedure;
-            consulta.CommandText = "TraerUsuario";
-            MySqlParameter ParMail = new MySqlParameter("ParMail", mail);
-           consulta.Parameters.Add(ParMail);
-            consulta.ExecuteNonQuery();
-            MySqlDataReader DrConsulta;
-            DrConsulta = consulta.ExecuteReader();
-            while (DrConsulta.Read())
-            {
-                NUsu.ID = Convert.ToInt32(DrConsulta["IdUsuario"].ToString());
-                NUsu.NombreUsuario = DrConsulta["NombreUsuario"].ToString();
-                NUsu.Apellido = DrConsulta["Apellido"].ToString();
-                NUsu.Mail = DrConsulta["Mail"].ToString();
-                NUsu.NombreEmpresa = DrConsulta["NombreEmpresa"].ToString();
-                NUsu.Contraseña = DrConsulta["Contraseña"].ToString();
-                NUsu.BaseDeDatos = DrConsulta["BaseDeDatos"].ToString();
             }
-            nCon.Close();
+            catch(Exception exc)
+            {
+                mens = "\n" + exc.Message;
+            }
             return NUsu;
         }
     }

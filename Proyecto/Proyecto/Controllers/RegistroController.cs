@@ -18,22 +18,21 @@ namespace Proyecto.Controllers
         [HttpPost]
         public ActionResult Login(Usuario NUsuario)
         {
-            Usuario MiUsser = new Usuario();
-            MiUsser = NUsuario;
-            string mens;
-            bool Existe = MiUsser.Login(out mens);
+            Usuario MiUsser =  NUsuario;
+            string mens = "";
+            bool Existe = MiUsser.Login(ref mens);
             if (Existe == true)
             {
                 ViewBag.Usuario = MiUsser;
-                if (MiUsser.HayDB())
+                if (MiUsser.HayDB(ref mens))
                 {
                     TempData["Mail"] = MiUsser.Mail;
-                    return View("Inicio");
+                    return RedirectToAction("Registro","Inicio");
                 }
                 else
                 {
                     TempData["Mail"] = MiUsser.Mail;
-                    return View("SubirArchivo");
+                    return RedirectToAction("Registro","SubirArchivo");
                 }
             }
             else
@@ -49,11 +48,17 @@ namespace Proyecto.Controllers
         [HttpPost]
         public ActionResult Registrarse(Usuario NUsuario2)
         {
+            string mensaje = "";
             Usuario NUsuario = new Usuario();
             NUsuario = NUsuario2;
-            string mensaje = NUsuario.Registro();
-            if (mensaje != "")
+            NUsuario.Registro(ref mensaje);
+            bool existe = NUsuario.Login(ref mensaje);
+            if (mensaje != "" || existe)
             {
+                if (existe)
+                {
+                    mensaje = mensaje + "\n" + "Ya existe un Usuario con ese Mail";
+                }
                 ViewBag.mensaje = mensaje;
                 return View();
             }
@@ -76,7 +81,7 @@ namespace Proyecto.Controllers
                         
                        ViewBag.Usuario = NUsuario;
                        TempData["Mail"] = NUsuario.Mail;
-                       return View("SubirArchivo");
+                       return View("Registro","SubirArchivo");
             }
                 }
             }
@@ -89,9 +94,10 @@ namespace Proyecto.Controllers
         [HttpPost]
         public ActionResult SubirArchivo(HttpPostedFileBase file)
         {
+            string mens = "";
             Usuario NUsuario = new Usuario();
-            string mail = TempData["Mail"].ToString();
-            NUsuario = NUsuario.TraerUsuario(mail);
+            NUsuario.Mail = TempData["Mail"].ToString();
+            NUsuario = NUsuario.TraerUsuario(ref mens);
             System.IO.File.Move(file.FileName,file.FileName + "-" + NUsuario.ID);
             string fileName = file.FileName;
             string FileExtension = fileName.Substring(fileName.LastIndexOf('.') + 1).ToLower();
@@ -100,13 +106,21 @@ namespace Proyecto.Controllers
                 NUsuario.BaseDeDatos = file.FileName;
                 var path = Server.MapPath("~/BD/") + file.FileName;
                 file.SaveAs(path);
-                NUsuario.CrearBaseDeDatos();
-                return View("Inicio");
+                NUsuario.CrearBaseDeDatos(ref mens);
+                if (mens.Length == 0)
+                {
+                    return RedirectToAction("Registro","Inicio");
+                }
+                else
+                {
+                    ViewBag.mensaje = mens;
+                    return RedirectToAction("Registro","SubirArchivo");                  
+                }
             }
             else
             {
-                ViewBag.mensaje = "Ingresaste un Archivo invalido";
-                return View();
+                ViewBag.mensaje = "\n" + "Ingresaste un Archivo invalido";
+                return RedirectToAction("Registro", "SubirArchivo");
             }
         }
         public ActionResult Inicio()
