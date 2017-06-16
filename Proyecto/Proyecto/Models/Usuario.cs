@@ -8,7 +8,7 @@ using Proyecto.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using MySql.Data.MySqlClient;
-
+using System.IO;
 
 namespace Proyecto.Models
 {
@@ -29,6 +29,7 @@ namespace Proyecto.Models
         public string ReContraseña { get; set; }
         public HttpPostedFile BD { get; set; }
         public string BaseDeDatos { get; set; }
+        public string NombreDeHoja { get; set; }
         private string NombreArchivo = "bdeasybusiness";
         private MySqlConnection nCon;
         private void Conectar()
@@ -203,6 +204,52 @@ namespace Proyecto.Models
                 mens = "\n" + exc.Message;
             }
             return NUsu;
+        }
+        private DataSet CargarExcelEnDataSet()
+        {
+            string connectionString = string.Format("provider=Microsoft.Jet.OLEDB.4.0; data source={0};Extended Properties=Excel 8.0;", BaseDeDatos);
+
+
+            DataSet data = new DataSet();
+
+            foreach (var sheetName in GetExcelSheetNames(connectionString))
+            {
+                using (OleDbConnection con = new OleDbConnection(connectionString))
+                {
+                    var dataTable = new DataTable();
+                    string query = string.Format("SELECT * FROM [{0}]", sheetName);
+                    con.Open();
+                    OleDbDataAdapter adapter = new OleDbDataAdapter(query, con);
+                    adapter.Fill(dataTable);
+                    data.Tables.Add(dataTable);
+                }
+            }
+
+            return data;
+        }
+        private string[] GetExcelSheetNames(string connectionString)
+        {
+            OleDbConnection con = null;
+            DataTable dt = null;
+            con = new OleDbConnection(connectionString);
+            con.Open();
+            dt = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+
+            if (dt == null)
+            {
+                return null;
+            }
+
+            String[] excelSheetNames = new String[dt.Rows.Count];
+            int i = 0;
+
+            foreach (DataRow row in dt.Rows)
+            {
+                excelSheetNames[i] = row["TABLE_NAME"].ToString();
+                i++;
+            }
+
+            return excelSheetNames;
         }
     }
 }
