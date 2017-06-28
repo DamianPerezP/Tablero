@@ -1,29 +1,10 @@
 ﻿
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Principal";
 }
 
-<!DOCTYPE HTML>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="~/CSS/StyleSheet1.css">
-</head>
-    <body class="index">
-        <div class="container-fluid">
-            <section class="uno text-center">
-                <p id="titulo" >Inteligencia empresarial, la nueva manera de controlar su información </p><br/>
-                <p id="subtitulo">   
-                Suba contenido, cree graficos, tablas y más.<br />
-                Con Easy Business, usted tendra a su empresa al alcance de sus manos.</p>
-                <br/>
-                <form action="/Registro/Login">
-                    <input value="COMIENCE GRATIS >" class="button buttonNegro" type="submit">
-                </form>
-                
-            </section>
-        </div>
-</body>
-</html>
-
-
+@{
+    var PartialPrincipal= Html.Partial("_PartialPrincipal");
+}
+@PartialPrincipal

@@ -1,0 +1,38 @@
+  .btn-xl {
+  background-color: #0f8464;
+  border-color: #0f8464
+
+}
+.navbar-brand {
+height: 68px;
+    width: 200px;
+}
+  
+.text-primary, a {
+    color: #0f8464;
+}
+.navbar-custom .navbar-nav>.active>a {
+    border-radius: 0;
+    color: #fff;
+    background-color: #0f8464;
+}
+::selection {
+    background: #0aa078;
+}
+.navbar-custom .navbar-nav>.active>a:focus, .navbar-custom .navbar-nav>.active>a:hover {
+    color: #fff;
+    background-color: #0f8464;
+}
+.timeline>li .timeline-image {
+    background-color: white;
+  
+}
+#color{
+	background-color: #00ff99;
+	color:black;
+}
+
+#PosicionTexto
+{
+    padding: 35px 20px 100px;
+}

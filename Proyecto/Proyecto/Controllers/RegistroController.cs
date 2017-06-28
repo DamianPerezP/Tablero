@@ -120,7 +120,7 @@ namespace Proyecto.Controllers
             else
             {
                 ViewBag.mensaje = "\n" + "Ingresaste un Archivo invalido";
-                return RedirectToAction("Registro", "SubirArchivo");
+                return RedirectToAction("Registro","SubirArchivo");
             }
         }
         public ActionResult Inicio()
@@ -130,6 +130,10 @@ namespace Proyecto.Controllers
         public ActionResult Principal()
         {
             return View();
+        }
+        public PartialViewResult PartialGrafico()
+        {
+            return PartialView("Inicio");
         }
     }
 }

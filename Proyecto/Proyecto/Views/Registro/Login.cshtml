@@ -1,31 +1,16 @@
-﻿@using Proyecto.Models
-@model Usuario
+﻿
+    @{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        ViewBag.Title = "Login";
+    }
 @{
-    ViewBag.Title = "Login";
+    var PartialLogin = Html.Partial("_PartialLogin");
 }
-<!DOCTYPE HTML>
-<html>
-<head>
-    <link rel="stylesheet" type="text/css" href="~/CSS/Login.css">
-   
-</head>
-<body>
-    <div class="container-fluid">
-            
-            @using (Html.BeginForm("Login", "Registro", FormMethod.Post, new { @class = "form-signin", enctype = "multipart/form-data" }))
-            {
-                <h1 class="form-signin-heading">Login</h1><br />
-                @Html.TextBoxFor(x => x.Mail, new { @class = "form-control", type = "email", id = "inputEmail", name = "username", placeholder = "Direccion Email", required = "", autofocus = "" });
-                @Html.ValidationMessageFor(x => x.Mail);
-                @Html.PasswordFor(x => x.Contraseña, new { @class = "form-control", type = "password", name = "password", placeholder = "Contraseña", required = "",autofocus=""}) ;
-                @Html.ValidationMessageFor(x => x.Contraseña);
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button><br />
-                <p class="registr"> Para registrarse haga click <a href=@Url.Action("Registrarse","Registro") title="Registrarse" target="_blank">Aqui</a> </p>
-            }
-            <h3>@ViewBag.mensaje</h3>
-            
-       </div>
-    </body>
-</html>
-
+@PartialLogin
+@section scripts{
+    @{ Html.RenderPartial("scripts");  }
+}
+@section _PartialHead{
+    @{ Html.RenderPartial("_PartialHead");  }
+}
 

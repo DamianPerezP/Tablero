@@ -1,32 +1,34 @@
 ﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title</title>
-    @Styles.Render("~/CSS/bootstrap.min.css")
-    @Styles.Render("~/CSS/StyleSheet1.css")
-   @Scripts.Render("~/JS/JavaScript.js") 
-    @Scripts.Render("~/JS/bootstrap.min.js")
-    
-</head>
+<html lang="en">
+@RenderSection("_PartialHead", required: false)
 <body>
-        <nav id="navp" class="navbar navbar-default navbar-fixed-top navbar-custom affix-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <a href=@Url.Action("Principal","Registro") title="EasyBusiness">
-                        <img class="navbar-brand" src="~/Img/EasyBusinessLogo.png">
-                    </a>
-                </div>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img src="~/Img/EasyBusinessLogo.png" class="navbar-brand" href="index.html">
             </div>
+            <!-- Top Menu Items -->
+            @RenderSection("Buttons", required: false)
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            @RenderSection("SideBar", required: false)
+            <!-- 
+            -->
+            <!-- /.navbar-collapse -->
         </nav>
-
-
+        @RenderSection("PartialFluid", required: false)
         @RenderBody()
-
-
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @RenderSection("scripts", required: false)
-    </body>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+    <!-- jQuery -->
+    @RenderSection("scripts", required: false)
+</body>
 </html>
