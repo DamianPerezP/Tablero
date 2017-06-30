@@ -416,6 +416,7 @@
     <Content Include="Views\Shared\_PartialLogin.cshtml" />
     <Content Include="Views\Shared\_PartialHead.cshtml" />
     <Content Include="Views\Shared\_PartialReg.cshtml" />
+    <Content Include="Views\Shared\_TablaPartial.cshtml" />
     <None Include="Views\Shared\_PartialPrincipal.cshtml" />
   </ItemGroup>
   <ItemGroup>

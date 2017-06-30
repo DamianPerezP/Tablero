@@ -19,7 +19,7 @@
             @Html.ValidationMessageFor(x => x.Contraseña);<br />
             @Html.PasswordFor(x => x.ReContraseña, new { @class = "form-control", type = "password", name = "password", placeholder = "ReContraseña", required = "", autofocus = "" });
             @Html.ValidationMessageFor(x => x.ReContraseña);<br />
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button><br />
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Registrarse</button><br />
             <p> Para ir al Login haga click <a href=@Url.Action("Login","Registro") title="Ir Login" target="_blank" />Aqui</p>
         }
         <h3>@ViewBag.mensaje</h3>

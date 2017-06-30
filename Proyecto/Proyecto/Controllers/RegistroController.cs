@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Proyecto.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 namespace Proyecto.Controllers
 {
@@ -18,7 +19,7 @@ namespace Proyecto.Controllers
         [HttpPost]
         public ActionResult Login(Usuario NUsuario)
         {
-            Usuario MiUsser =  NUsuario;
+            Usuario MiUsser = NUsuario;
             string mens = "";
             bool Existe = MiUsser.Login(ref mens);
             if (Existe == true)
@@ -27,12 +28,12 @@ namespace Proyecto.Controllers
                 if (MiUsser.HayDB(ref mens))
                 {
                     TempData["Mail"] = MiUsser.Mail;
-                    return RedirectToAction("Registro","Inicio");
+                    return RedirectToAction("Registro", "Inicio");
                 }
                 else
                 {
                     TempData["Mail"] = MiUsser.Mail;
-                    return RedirectToAction("Registro","SubirArchivo");
+                    return RedirectToAction("Registro", "SubirArchivo");
                 }
             }
             else
@@ -40,6 +41,10 @@ namespace Proyecto.Controllers
                 ViewBag.mensaje = mens;
                 return View();
             }
+        }
+        public ActionResult Inicio()
+        {
+            return View();
         }
         public ActionResult Registrarse()
         {
@@ -76,16 +81,16 @@ namespace Proyecto.Controllers
                         ViewBag.mensaje = "Ingrese dos contraseñas iguales";
                         return View();
                     }
-                     else
+                    else
                     {
-                        
-                       ViewBag.Usuario = NUsuario;
-                       TempData["Mail"] = NUsuario.Mail;
-                       return View("Registro","SubirArchivo");
-            }
+
+                        ViewBag.Usuario = NUsuario;
+                        TempData["Mail"] = NUsuario.Mail;
+                        return View("Registro", "SubirArchivo");
+                    }
                 }
             }
-           
+
         }
         public ActionResult SubirArchivo()
         {
@@ -98,10 +103,10 @@ namespace Proyecto.Controllers
             Usuario NUsuario = new Usuario();
             NUsuario.Mail = TempData["Mail"].ToString();
             NUsuario = NUsuario.TraerUsuario(ref mens);
-            System.IO.File.Move(file.FileName,file.FileName + "-" + NUsuario.ID);
+            System.IO.File.Move(file.FileName, file.FileName + "-" + NUsuario.ID);
             string fileName = file.FileName;
             string FileExtension = fileName.Substring(fileName.LastIndexOf('.') + 1).ToLower();
-                if (file.ContentLength > 0 && file != null && (FileExtension == "xlsx" || FileExtension == "xlsm" || FileExtension == "xltx" || FileExtension == "xltm" || FileExtension == "xlam"))
+            if (file.ContentLength > 0 && file != null && (FileExtension == "xlsx" || FileExtension == "xlsm" || FileExtension == "xltx" || FileExtension == "xltm" || FileExtension == "xlam"))
             {
                 NUsuario.BaseDeDatos = file.FileName;
                 var path = Server.MapPath("~/BD/") + file.FileName;
@@ -109,31 +114,32 @@ namespace Proyecto.Controllers
                 NUsuario.CrearBaseDeDatos(ref mens);
                 if (mens.Length == 0)
                 {
-                    return RedirectToAction("Registro","Inicio");
+                    ViewBag.Usuario = NUsuario;
+                    return RedirectToAction("Registro", "Inicio");
                 }
                 else
                 {
                     ViewBag.mensaje = mens;
-                    return RedirectToAction("Registro","SubirArchivo");                  
+                    return RedirectToAction("Registro", "SubirArchivo");
                 }
             }
             else
             {
                 ViewBag.mensaje = "\n" + "Ingresaste un Archivo invalido";
-                return RedirectToAction("Registro","SubirArchivo");
+                return RedirectToAction("Registro", "SubirArchivo");
             }
         }
-        public ActionResult Inicio()
+        public ActionResult _TablaPartial()
         {
-            return View();
+            Usuario usr = new Usuario();
+            usr = ViewBag.Usuario;
+            DataSet dsData = usr.CargarExcelEnDataSet();
+            ViewBag.ElDataSet = dsData;
+            return PartialView();
         }
         public ActionResult Principal()
         {
             return View();
-        }
-        public PartialViewResult PartialGrafico()
-        {
-            return PartialView("Inicio");
         }
     }
 }

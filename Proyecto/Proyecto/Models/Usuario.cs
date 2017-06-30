@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using MySql.Data.MySqlClient;
 using System.IO;
+using System.Windows;
 
 namespace Proyecto.Models
 {
@@ -29,36 +30,37 @@ namespace Proyecto.Models
         public string ReContraseña { get; set; }
         public HttpPostedFile BD { get; set; }
         public string BaseDeDatos { get; set; }
+        public string FechaBD { get; set; }
         public string NombreDeHoja { get; set; }
         private string NombreArchivo = "bdeasybusiness";
         private MySqlConnection nCon;
         private void Conectar()
         {
             //string proovedor = "Server=" + "localhost" + ";" + "Database=" + NombreArchivo + ";" + "Uid=" + "root" + ";" + "Pwd=" + "ROOT" + ";";
-            string proovedor = String.Format ("Server={0};Database={1};Uid={2};Pwd={3};",
+            string proovedor = String.Format("Server={0};Database={1};Uid={2};Pwd={3};",
                                                 "localhost",
-                                                NombreArchivo, 
-                                                "root", 
-                                                "");
+                                                NombreArchivo,
+                                                "root",
+                                                "root");
             nCon = new MySqlConnection();
-        nCon.ConnectionString = proovedor;
+            nCon.ConnectionString = proovedor;
             nCon.Open();
-            
+
         }
         //Loguearse
         public bool Login(ref string mens)
-        {       
-
-                bool existe = false;
-                string strSQL = "";
+        {
+            String mailx = this.Mail.Replace('@', 'A');
+            bool existe = false;
+            string strSQL = "";
             try
             {
                 Conectar();
                 MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.Text;
-                strSQL += "SELECT `Mail`";
-                strSQL += "FROM `USUARIOS`";
-                strSQL += " WHERE `Mail` = " + Mail + "AND `Contraseña` = " + Contraseña + "";
+                strSQL += "SELECT Mail ";
+                strSQL += "FROM USUARIOS";
+                strSQL += " where Mail = '" + (mailx) + "' AND [Contraseña]= '" + Contraseña + "'";
                 Consulta.CommandText = strSQL;
                 MySqlDataReader drCon = Consulta.ExecuteReader();
                 if (drCon.HasRows == true)
@@ -66,17 +68,19 @@ namespace Proyecto.Models
                     existe = true;
                 }
                 nCon.Close();
-               
+
             }
             catch (Exception exc)
             {
                 mens = "\n" + exc.Message;
-            } return existe;
             }
-           
+            return existe;
+        }
+
         //Se Registra
         public string Registro(ref string mensaje)
         {
+            String mailx = this.Mail.Replace('@', 'A');
             int intRegsAffected = 0;
             string strSQL = "";
             try
@@ -85,17 +89,19 @@ namespace Proyecto.Models
 
                 MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.Text;
-                strSQL += "INSERT INTO `bdeasybusiness`.`usuarios`";
-                strSQL += " (`Mail`, `NombreUsuario`, `ApellidoUsuario`, `NombreEmpresa`, `Contraseña`, `BaseDeDatos`,  `FechaBD`)";
-                strSQL += " VALUES";
-                //strSQL += " ('"+ this.Mail + "', '"+ this.NombreUsuario + "', '"+ this.Apellido +"', '"+this.NombreEmpresa + "', '"+ this.Contraseña + "', 'aaa', '2012/05/02'); ";
-                strSQL += String.Format( " ('{0}', '{1}', '{2}', '{3}', '{4}', '', ''); ",
-                    this.Mail,
-                    this.NombreUsuario,
-                    this.Apellido,
-                    this.NombreEmpresa,
-                    this.Contraseña);
+                //  VALUES ('pepe@pepe.comar', 'Nombre', 'Apellido', 'nombreempo', 'passwd', 'sss', '2', '2015-05-05');
 
+                strSQL += "INSERT INTO `bdeasybusiness`.`usuarios`";
+                strSQL += " (`Mail`, `NombreUsuario`, `ApellidoUsuario`, `NombreEmpresa`, `Contraseña`, `BaseDeDatos`, `IdUsuario`, `FechaBD`)";
+                strSQL += " VALUES ";
+                //strSQL += " ('"+ this.Mail + "', '"+ this.NombreUsuario + "', '"+ this.Apellido +"', '"+this.NombreEmpresa + "', '"+ this.Contraseña + "', '', ''); ";
+                strSQL += String.Format(" ('{0}', '{1}', '{2}', '{3}', '{4}', '2', '2015-06-04'); ",
+                   mailx,
+                   this.NombreUsuario,
+                   this.Apellido,
+                   this.NombreEmpresa,
+                   this.Contraseña);
+                 
                 Consulta.CommandText = strSQL;
                 intRegsAffected = Consulta.ExecuteNonQuery();
 
@@ -172,7 +178,7 @@ namespace Proyecto.Models
             {
                 mens = "\n" + exc.Message;
             }
-            }
+        }
         public Usuario TraerUsuario(ref string mens)
         {
             Usuario NUsu = new Usuario();
@@ -199,13 +205,13 @@ namespace Proyecto.Models
                 }
                 nCon.Close();
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 mens = "\n" + exc.Message;
             }
             return NUsu;
         }
-        private DataSet CargarExcelEnDataSet()
+        public DataSet CargarExcelEnDataSet()
         {
             string connectionString = string.Format("provider=Microsoft.Jet.OLEDB.4.0; data source={0};Extended Properties=Excel 8.0;", BaseDeDatos);
 
@@ -226,6 +232,13 @@ namespace Proyecto.Models
             }
 
             return data;
+        }
+        public void CargarDGVEnVB(DataSet ds, String NombreTabla)
+        {
+            //DataGridView DataGridView1 = new DataGridView();
+            //DataGridView1.AutoGenerateColumns = true;
+            //DataGridView1.DataSource = ds;
+            //DataGridView1.DataMember = NombreTabla;
         }
         private string[] GetExcelSheetNames(string connectionString)
         {
