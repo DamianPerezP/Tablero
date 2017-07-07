@@ -1,0 +1,21 @@
+﻿@using Proyecto.Models
+@model Usuario
+@{
+    ViewBag.Title = "Inicio";
+}
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/Subir.css">
+</head>
+<div class="container">
+    @using (Html.BeginForm("SubirArchivo", "Registro", FormMethod.Post, new { @class = "form-signin", enctype = "multipart/form-data" }))
+    {
+        <h1 class="form-signin-heading">Ingrese su base de datos</h1><br />
+        @Html.Label("Ingrese Excel:");
+        @Html.ValidationMessageFor(x => x.BD);<br />
+        <input type="file" name="file" /><br />
+        <h3>@ViewBag.mensaje</h3>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Continuar</button><br />
+    }
+    </div>
+
+

@@ -225,6 +225,7 @@
     <Content Include="CSS\bootstrap.min.css" />
     <Content Include="CSS\estilos.css" />
     <Content Include="CSS\plugins\morris.css" />
+    <Content Include="CSS\Subir.css" />
     <Content Include="CSS\Registro.css" />
     <Content Include="CSS\sb-admin - copia.css" />
     <Content Include="CSS\sb-admin.css" />
@@ -417,6 +418,8 @@
     <Content Include="Views\Shared\_PartialHead.cshtml" />
     <Content Include="Views\Shared\_PartialReg.cshtml" />
     <Content Include="Views\Shared\_TablaPartial.cshtml" />
+    <Content Include="Views\Shared\_PartialSubir.cshtml" />
+    <Content Include="Views\Shared\_partialPanel.cshtml" />
     <None Include="Views\Shared\_PartialPrincipal.cshtml" />
   </ItemGroup>
   <ItemGroup>
