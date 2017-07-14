@@ -5,7 +5,7 @@
 
 
 @{
-    var PartialGrafico = Html.Partial("_partialGrafico");
+    var PartialGrafico = Html.Partial("_partialGrafico", (object)ViewBag.Nombres);
 }
 @PartialGrafico
 @{

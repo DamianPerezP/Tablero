@@ -44,6 +44,9 @@ namespace Proyecto.Controllers
         }
         public ActionResult Inicio()
         {
+            Usuario usu = new Usuario();
+            usu.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\LibroAnterior.xls";
+            ViewBag.Nombres = usu.CargarExcelEnDataSet();         
             return View();
         }
         public ActionResult Registrarse()
@@ -133,6 +136,7 @@ namespace Proyecto.Controllers
         {
             Usuario usr = new Usuario();
             usr = ViewBag.Usuario;
+            //usr.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\Libro1.xlsx";
             DataSet dsData = usr.CargarExcelEnDataSet();
             ViewBag.ElDataSet = dsData;
             return PartialView();
