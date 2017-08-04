@@ -118,8 +118,9 @@ namespace Proyecto.Controllers
             if (file.ContentLength > 0 && file != null && (FileExtension == "xlsx" || FileExtension == "xlsm" || FileExtension == "xltx" || FileExtension == "xltm" || FileExtension == "xlam"))
             {
                 var path = Server.MapPath("~/BD/") + file.FileName;
+                var newpath = Server.MapPath("~/BD/") + NUsuario.ID + "-" + file.FileName;
                 file.SaveAs(path);
-                System.IO.File.Move(file.FileName, file.FileName + "-" + NUsuario.ID);
+                System.IO.File.Move(path, newpath);
                 NUsuario.BaseDeDatos = file.FileName;
                 NUsuario.CrearBaseDeDatos(ref mens);
                 if (mens.Length == 0)
