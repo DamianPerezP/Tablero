@@ -50,7 +50,7 @@ namespace Proyecto.Models
         //Loguearse
         public bool Login(ref string mens)
         {
-            String mailx = this.Mail.Replace('@', 'A');
+        this.Mail = this.Mail.Replace('@', 'A');
             bool existe = false;
             string strSQL = "";
             try
@@ -59,20 +59,21 @@ namespace Proyecto.Models
                 MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.Text;
                 strSQL += "SELECT Mail ";
-                strSQL += "FROM USUARIOS";
-                strSQL += " where Mail = '" + (mailx) + "' AND [Contraseña]= '" + Contraseña + "'";
+                strSQL += "FROM usuarios";
+                strSQL += " where Mail = '" + this.Mail + "' AND Password = '" + Contraseña + "'";
                 Consulta.CommandText = strSQL;
                 MySqlDataReader drCon = Consulta.ExecuteReader();
                 if (drCon.HasRows == true)
                 {
                     existe = true;
                 }
+                
                 nCon.Close();
 
             }
             catch (Exception exc)
             {
-                mens = "\n" + exc.Message;
+                mens = mens + "\n" + exc.Message;
             }
             return existe;
         }
@@ -80,7 +81,7 @@ namespace Proyecto.Models
         //Se Registra
         public string Registro(ref string mensaje)
         {
-            String mailx = this.Mail.Replace('@', 'A');
+            this.Mail = this.Mail.Replace('@', 'A');
             int intRegsAffected = 0;
             string strSQL = "";
             try
@@ -92,11 +93,12 @@ namespace Proyecto.Models
                 //  VALUES ('pepe@pepe.comar', 'Nombre', 'Apellido', 'nombreempo', 'passwd', 'sss', '2', '2015-05-05');
 
                 strSQL += "INSERT INTO `bdeasybusiness`.`usuarios`";
-                strSQL += " (`Mail`, `NombreUsuario`, `ApellidoUsuario`, `NombreEmpresa`, `Contraseña`, `BaseDeDatos`, `IdUsuario`, `FechaBD`)";
+                strSQL += " (`Mail`, `NombreUsuario`, `ApellidoUsuario`, `NombreEmpresa`, `Password`, `BaseDeDatos`, `FechaBD`)";
                 strSQL += " VALUES ";
                 //strSQL += " ('"+ this.Mail + "', '"+ this.NombreUsuario + "', '"+ this.Apellido +"', '"+this.NombreEmpresa + "', '"+ this.Contraseña + "', '', ''); ";
-                strSQL += String.Format(" ('{0}', '{1}', '{2}', '{3}', '{4}', '2', '2015-06-04'); ",
-                   mailx,
+                strSQL += String.Format(" ('{0}', '{1}', '{2}', '{3}', '{4}', '2' ,'2015-06-04'); ",
+ //                  mailx,
+                   this.Mail,
                    this.NombreUsuario,
                    this.Apellido,
                    this.NombreEmpresa,
@@ -145,7 +147,7 @@ namespace Proyecto.Models
                 strSQL += "WHERE `Mail` = " + Mail + ";";
                 Consulta.CommandText = strSQL;
                 MySqlDataReader drCon = Consulta.ExecuteReader();
-                if (drCon.HasRows == true)
+                if (drCon.HasRows == true && drCon["BaseDeDatos"].ToString() != "2")
                 {
                     existe = true;
                 }
@@ -181,6 +183,7 @@ namespace Proyecto.Models
         }
         public Usuario TraerUsuario(ref string mens)
         {
+            this.Mail = Mail.Replace('@', 'A');
             Usuario NUsu = new Usuario();
             string strSQL = "";
             try
@@ -190,7 +193,7 @@ namespace Proyecto.Models
                 Consulta.CommandType = CommandType.Text;
                 strSQL += "SELECT `*`";
                 strSQL += "FROM `usuarios`";
-                strSQL += " WHERE `Mail` = " + Mail + ";";
+                strSQL += " WHERE `Mail` = '" + Mail + "';";
                 Consulta.CommandText = strSQL;
                 MySqlDataReader DrConsulta = Consulta.ExecuteReader();
                 while (DrConsulta.Read())
@@ -200,7 +203,7 @@ namespace Proyecto.Models
                     NUsu.Apellido = DrConsulta["Apellido"].ToString();
                     NUsu.Mail = DrConsulta["Mail"].ToString();
                     NUsu.NombreEmpresa = DrConsulta["NombreEmpresa"].ToString();
-                    NUsu.Contraseña = DrConsulta["Contraseña"].ToString();
+                    NUsu.Contraseña = DrConsulta["Password"].ToString();
                     NUsu.BaseDeDatos = DrConsulta["BaseDeDatos"].ToString();
                 }
                 nCon.Close();

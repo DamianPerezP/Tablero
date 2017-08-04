@@ -28,16 +28,17 @@ namespace Proyecto.Controllers
                 if (MiUsser.HayDB(ref mens))
                 {
                     TempData["Mail"] = MiUsser.Mail;
-                    return RedirectToAction("Registro", "Inicio");
+                    return RedirectToAction("Inicio", "Registro");
                 }
                 else
                 {
                     TempData["Mail"] = MiUsser.Mail;
-                    return RedirectToAction("Registro", "SubirArchivo");
+                    return RedirectToAction("SubirArchivo", "Registro");
                 }
             }
             else
             {
+                mens = mens + "\n Mail o Contraseña incorrecta, inténtelo nuevamente";
                 ViewBag.mensaje = mens;
                 return View();
             }
@@ -59,7 +60,6 @@ namespace Proyecto.Controllers
             string mensaje = "";
             Usuario NUsuario = new Usuario();
             NUsuario = NUsuario2;
-            NUsuario.Registro(ref mensaje);
             bool existe = NUsuario.Login(ref mensaje);
             if (mensaje != "" || existe)
             {
@@ -79,17 +79,24 @@ namespace Proyecto.Controllers
                 }
                 else
                 {
-                    if (NUsuario2.Contraseña == NUsuario2.ReContraseña)
+                    if (NUsuario2.Contraseña != NUsuario2.ReContraseña)
                     {
                         ViewBag.mensaje = "Ingrese dos contraseñas iguales";
                         return View();
                     }
                     else
                     {
-
-                        ViewBag.Usuario = NUsuario;
-                        TempData["Mail"] = NUsuario.Mail;
-                        return View("Registro", "SubirArchivo");
+                        NUsuario.Registro(ref mensaje);
+                        if (mensaje == "")
+                        {
+                            ViewBag.Usuario = NUsuario;
+                            TempData["Mail"] = NUsuario.Mail;
+                            return RedirectToAction("SubirArchivo", "Registro");
+                        }
+                        else
+                        {
+                            return View();
+                        }
                     }
                 }
             }
@@ -106,14 +113,14 @@ namespace Proyecto.Controllers
             Usuario NUsuario = new Usuario();
             NUsuario.Mail = TempData["Mail"].ToString();
             NUsuario = NUsuario.TraerUsuario(ref mens);
-            System.IO.File.Move(file.FileName, file.FileName + "-" + NUsuario.ID);
             string fileName = file.FileName;
             string FileExtension = fileName.Substring(fileName.LastIndexOf('.') + 1).ToLower();
             if (file.ContentLength > 0 && file != null && (FileExtension == "xlsx" || FileExtension == "xlsm" || FileExtension == "xltx" || FileExtension == "xltm" || FileExtension == "xlam"))
             {
-                NUsuario.BaseDeDatos = file.FileName;
                 var path = Server.MapPath("~/BD/") + file.FileName;
                 file.SaveAs(path);
+                System.IO.File.Move(file.FileName, file.FileName + "-" + NUsuario.ID);
+                NUsuario.BaseDeDatos = file.FileName;
                 NUsuario.CrearBaseDeDatos(ref mens);
                 if (mens.Length == 0)
                 {
