@@ -27,12 +27,16 @@ namespace Proyecto.Controllers
                 ViewBag.Usuario = MiUsser;
                 if (MiUsser.HayDB(ref mens))
                 {
-                    TempData["email"] = MiUsser.Mail.ToString();
+                    //TempData["email"] = MiUsser.Mail.ToString();
+                    //HttpCookie cookie = new HttpCookie(MiUsser.Mail, "email");
+                    //Response.Cookies.Add(cookie);
                     return RedirectToAction("Inicio", "Registro");
                 }
                 else
                 {
-                    TempData["email"] = MiUsser.Mail.ToString();
+                    //TempData["email"] = MiUsser.Mail.ToString();
+                    //HttpCookie cookie = new HttpCookie(MiUsser.Mail, "email");
+                    //Response.Cookies.Add(cookie);
                     return RedirectToAction("SubirArchivo", "Registro");
                 }
             }
@@ -45,9 +49,14 @@ namespace Proyecto.Controllers
         }
         public ActionResult Inicio()
         {
+            String mens = "";
             Usuario usu = new Usuario();
-            usu.BaseDeDatos = @"C:ProyrctoFinal\Tablero\Proyecto\BaseDeDatos\LibroAnterior.xls";
-            ViewBag.Nombres = usu.CargarExcelEnDataSet();         
+            usu.Mail = "sebilernerAgmail.com";
+            usu= usu.TraerUsuario(ref mens);
+            String bdd = usu.BaseDeDatos;
+            usu.BaseDeDatos = @"C:\Tablero\Proyecto\Proyecto\BD\" + bdd;
+            ViewBag.Nombres = usu.CargarExcelEnDataSet();
+            ViewBag.mensaje = mens;         
             return View();
         }
         public ActionResult Registrarse()
@@ -90,7 +99,9 @@ namespace Proyecto.Controllers
                         if (mensaje == "")
                         {
                             ViewBag.Usuario = NUsuario;
-                            TempData["email"] = NUsuario.Mail.ToString();
+                            //TempData["email"] = NUsuario.Mail.ToString();
+                            //HttpCookie cookie = new HttpCookie(NUsuario.Mail, "email");
+                            //Response.Cookies.Add(cookie);
                             return RedirectToAction("SubirArchivo", "Registro");
                         }
                         else
@@ -111,11 +122,13 @@ namespace Proyecto.Controllers
         {
             string mens = "";
             Usuario NUsuario = new Usuario();
-            NUsuario.Mail = TempData["email"].ToString();
-            NUsuario = NUsuario.TraerUsuario(ref mens);
+            //NUsuario.Mail = TempData["email"].ToString();
+            // string tempCookie = Request.Cookies["email"].Value;
+            //NUsuario.Mail = tempCookie;
+            NUsuario.Mail = "sebilernerAgmail.com";
             string fileName = file.FileName;
             string FileExtension = fileName.Substring(fileName.LastIndexOf('.') + 1).ToLower();
-            if (file.ContentLength > 0 && file != null && (FileExtension == "xlsx" || FileExtension == "xlsm" || FileExtension == "xltx" || FileExtension == "xltm" || FileExtension == "xlam"))
+            if (file.ContentLength > 0 && file != null && (FileExtension == "xlsx" || FileExtension == "xlsm" || FileExtension == "xltx" || FileExtension == "xltm" || FileExtension == "xlam") || FileExtension == "xls")
             {
                 try
                 {
@@ -123,6 +136,7 @@ namespace Proyecto.Controllers
                     var newpath = Server.MapPath("~/BD/") + NUsuario.ID + "-" + file.FileName;
                     file.SaveAs(path);
                     System.IO.File.Move(path, newpath);
+                    NUsuario.Mail = "sebilernerAgmail.com";
                     NUsuario.BaseDeDatos = file.FileName;
                     NUsuario.CrearBaseDeDatos(ref mens);
                 }
@@ -133,7 +147,7 @@ namespace Proyecto.Controllers
                 if (mens.Length == 0)
                 {
                     ViewBag.Usuario = NUsuario;
-                    return RedirectToAction("Registro", "Inicio");
+                    return RedirectToAction("Inicio", "Registro");
                 }
                 else
                 {
@@ -149,9 +163,13 @@ namespace Proyecto.Controllers
         }
         public ActionResult _TablaPartial()
         {
+            String mens = "";
             Usuario usr = new Usuario();
-            usr = ViewBag.Usuario;
-            //usr.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\Libro1.xlsx";
+            //usr = ViewBag.Usuario;
+            usr.Mail = "sebilernerAgmail.com";
+            usr = usr.TraerUsuario(ref mens);
+            String bdd = usr.BaseDeDatos;
+            usr.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\" + bdd;
             DataSet dsData = usr.CargarExcelEnDataSet();
             ViewBag.ElDataSet = dsData;
             return PartialView();

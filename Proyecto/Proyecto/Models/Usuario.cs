@@ -42,14 +42,14 @@ namespace Proyecto.Models
                                                 "localhost",
                                                 NombreArchivo,
                                                 "root",
-                                                "");
+                                                "root");
             nCon = new MySqlConnection();
             nCon.ConnectionString = proovedor;
             nCon.Open();
 
         }
         //Loguearse
-        public void GuardarEmail ()
+        public void GuardarEmail()
         {
             eMail = Mail;
         }
@@ -60,7 +60,7 @@ namespace Proyecto.Models
 
         public bool Login(ref string mens)
         {
-        this.Mail = this.Mail.Replace('@', 'A');
+            this.Mail = this.Mail.Replace('@', 'A');
             bool existe = false;
             string strSQL = "";
             try
@@ -70,14 +70,14 @@ namespace Proyecto.Models
                 Consulta.CommandType = CommandType.Text;
                 strSQL += "SELECT Mail ";
                 strSQL += "FROM usuarios";
-                strSQL += " where Mail = '" + this.Mail + "' AND Password = '" + Contraseña + "'";
+                strSQL += " WHERE Mail = '" + this.Mail + "' AND Password = '" + Contraseña + "'";
                 Consulta.CommandText = strSQL;
                 MySqlDataReader drCon = Consulta.ExecuteReader();
                 if (drCon.HasRows == true)
                 {
                     existe = true;
                 }
-                
+
                 nCon.Close();
 
             }
@@ -102,18 +102,18 @@ namespace Proyecto.Models
                 Consulta.CommandType = CommandType.Text;
                 //  VALUES ('pepe@pepe.comar', 'Nombre', 'Apellido', 'nombreempo', 'passwd', 'sss', '2', '2015-05-05');
 
-                strSQL += "INSERT INTO `bdeasybusiness`.`usuarios`";
-                strSQL += " (`Mail`, `NombreUsuario`, `ApellidoUsuario`, `NombreEmpresa`, `Password`, `BaseDeDatos`, `FechaBD`)";
+                strSQL += "INSERT INTO usuarios";
+                strSQL += " (Mail, NombreUsuario, ApellidoUsuario, NombreEmpresa, Password, BaseDeDatos, FechaBD)";
                 strSQL += " VALUES ";
                 //strSQL += " ('"+ this.Mail + "', '"+ this.NombreUsuario + "', '"+ this.Apellido +"', '"+this.NombreEmpresa + "', '"+ this.Contraseña + "', '', ''); ";
                 strSQL += String.Format(" ('{0}', '{1}', '{2}', '{3}', '{4}', '2' ,'2015-06-04'); ",
- //                  mailx,
+                   //                  mailx,
                    this.Mail,
                    this.NombreUsuario,
                    this.Apellido,
                    this.NombreEmpresa,
                    this.Contraseña);
-                 
+
                 Consulta.CommandText = strSQL;
                 intRegsAffected = Consulta.ExecuteNonQuery();
 
@@ -152,9 +152,9 @@ namespace Proyecto.Models
 
                 MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.Text;
-                strSQL += "SELECT `BaseDeDatos`";
-                strSQL += "FROM `usuarios`";
-                strSQL += "WHERE `Mail` = `" + Mail + "`;";
+                strSQL += "SELECT BaseDeDatos";
+                strSQL += "FROM usuarios";
+                strSQL += "WHERE Mail = '" + Mail + "';";
                 Consulta.CommandText = strSQL;
                 MySqlDataReader drCon = Consulta.ExecuteReader();
                 if (drCon.HasRows == true && drCon["BaseDeDatos"].ToString() != "2")
@@ -180,9 +180,9 @@ namespace Proyecto.Models
 
                 MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.Text;
-                strSQL += "UPDATE `usuarios`";
-                strSQL += "SET `BaseDeDatos` = `" + BaseDeDatos + "`";
-                strSQL += "WHERE `Mail` = `" + Mail + "`;";
+                strSQL += "UPDATE usuarios ";
+                strSQL += "SET BaseDeDatos = '" + BaseDeDatos + "' ";
+                strSQL += "WHERE Mail = '" + Mail + "';";
                 Consulta.CommandText = strSQL;
                 intRegsAffected = Consulta.ExecuteNonQuery();
             }
@@ -193,7 +193,7 @@ namespace Proyecto.Models
         }
         public Usuario TraerUsuario(ref string mens)
         {
-            Mail = Mail.Replace('@', 'A');
+            this.Mail = Mail.Replace('@', 'A');
             Usuario NUsu = new Usuario();
             string strSQL = "";
             try
@@ -201,16 +201,16 @@ namespace Proyecto.Models
                 Conectar();
                 MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.Text;
-                strSQL += "SELECT `*`";
-                strSQL += "FROM `usuarios`";
-                strSQL += " WHERE `Mail` = '" + Mail + "';";
+                strSQL += "SELECT * ";
+                strSQL += "FROM usuarios ";
+                strSQL += " WHERE Mail = '" + this.Mail + "';";
                 Consulta.CommandText = strSQL;
                 MySqlDataReader DrConsulta = Consulta.ExecuteReader();
                 while (DrConsulta.Read())
                 {
                     NUsu.ID = Convert.ToInt32(DrConsulta["IdUsuario"].ToString());
                     NUsu.NombreUsuario = DrConsulta["NombreUsuario"].ToString();
-                    NUsu.Apellido = DrConsulta["Apellido"].ToString();
+                    NUsu.Apellido = DrConsulta["ApellidoUsuario"].ToString();
                     NUsu.Mail = DrConsulta["Mail"].ToString();
                     NUsu.NombreEmpresa = DrConsulta["NombreEmpresa"].ToString();
                     NUsu.Contraseña = DrConsulta["Password"].ToString();
@@ -230,20 +230,18 @@ namespace Proyecto.Models
 
 
             DataSet data = new DataSet();
-
-            foreach (var sheetName in GetExcelSheetNames(connectionString))
-            {
-                using (OleDbConnection con = new OleDbConnection(connectionString))
+                foreach (var sheetName in GetExcelSheetNames(connectionString))
                 {
-                    var dataTable = new DataTable();
-                    string query = string.Format("SELECT * FROM [{0}]", sheetName);
-                    con.Open();
-                    OleDbDataAdapter adapter = new OleDbDataAdapter(query, con);
-                    adapter.Fill(dataTable);
-                    data.Tables.Add(dataTable);
+                    using (OleDbConnection con = new OleDbConnection(connectionString))
+                    {
+                        var dataTable = new DataTable();
+                        string query = string.Format("SELECT * FROM [{0}]", sheetName);
+                        con.Open();
+                        OleDbDataAdapter adapter = new OleDbDataAdapter(query, con);
+                        adapter.Fill(dataTable);
+                        data.Tables.Add(dataTable);
+                    }
                 }
-            }
-
             return data;
         }
         public void CargarDGVEnVB(DataSet ds, String NombreTabla)
@@ -253,7 +251,7 @@ namespace Proyecto.Models
             //DataGridView1.DataSource = ds;
             //DataGridView1.DataMember = NombreTabla;
         }
-        private string[] GetExcelSheetNames(string connectionString)
+           private string[] GetExcelSheetNames(string connectionString)
         {
             OleDbConnection con = null;
             DataTable dt = null;
