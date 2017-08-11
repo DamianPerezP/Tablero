@@ -33,6 +33,7 @@ namespace Proyecto.Models
         public string FechaBD { get; set; }
         public string NombreDeHoja { get; set; }
         private string NombreArchivo = "bdeasybusiness";
+        public String eMail;
         private MySqlConnection nCon;
         private void Conectar()
         {
@@ -41,13 +42,22 @@ namespace Proyecto.Models
                                                 "localhost",
                                                 NombreArchivo,
                                                 "root",
-                                                "root");
+                                                "");
             nCon = new MySqlConnection();
             nCon.ConnectionString = proovedor;
             nCon.Open();
 
         }
         //Loguearse
+        public void GuardarEmail ()
+        {
+            eMail = Mail;
+        }
+        public String DevolverEmail()
+        {
+            return eMail;
+        }
+
         public bool Login(ref string mens)
         {
         this.Mail = this.Mail.Replace('@', 'A');
@@ -144,7 +154,7 @@ namespace Proyecto.Models
                 Consulta.CommandType = CommandType.Text;
                 strSQL += "SELECT `BaseDeDatos`";
                 strSQL += "FROM `usuarios`";
-                strSQL += "WHERE `Mail` = " + Mail + ";";
+                strSQL += "WHERE `Mail` = `" + Mail + "`;";
                 Consulta.CommandText = strSQL;
                 MySqlDataReader drCon = Consulta.ExecuteReader();
                 if (drCon.HasRows == true && drCon["BaseDeDatos"].ToString() != "2")
@@ -171,8 +181,8 @@ namespace Proyecto.Models
                 MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.Text;
                 strSQL += "UPDATE `usuarios`";
-                strSQL += "SET `BaseDeDatos` = " + BaseDeDatos;
-                strSQL += "WHERE `Mail` = " + Mail + ";";
+                strSQL += "SET `BaseDeDatos` = `" + BaseDeDatos + "`";
+                strSQL += "WHERE `Mail` = `" + Mail + "`;";
                 Consulta.CommandText = strSQL;
                 intRegsAffected = Consulta.ExecuteNonQuery();
             }
@@ -183,7 +193,7 @@ namespace Proyecto.Models
         }
         public Usuario TraerUsuario(ref string mens)
         {
-            this.Mail = Mail.Replace('@', 'A');
+            Mail = Mail.Replace('@', 'A');
             Usuario NUsu = new Usuario();
             string strSQL = "";
             try

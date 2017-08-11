@@ -27,12 +27,12 @@ namespace Proyecto.Controllers
                 ViewBag.Usuario = MiUsser;
                 if (MiUsser.HayDB(ref mens))
                 {
-                    TempData["Mail"] = MiUsser.Mail;
+                    TempData["email"] = MiUsser.Mail.ToString();
                     return RedirectToAction("Inicio", "Registro");
                 }
                 else
                 {
-                    TempData["Mail"] = MiUsser.Mail;
+                    TempData["email"] = MiUsser.Mail.ToString();
                     return RedirectToAction("SubirArchivo", "Registro");
                 }
             }
@@ -46,7 +46,7 @@ namespace Proyecto.Controllers
         public ActionResult Inicio()
         {
             Usuario usu = new Usuario();
-            usu.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\LibroAnterior.xls";
+            usu.BaseDeDatos = @"C:ProyrctoFinal\Tablero\Proyecto\BaseDeDatos\LibroAnterior.xls";
             ViewBag.Nombres = usu.CargarExcelEnDataSet();         
             return View();
         }
@@ -90,7 +90,7 @@ namespace Proyecto.Controllers
                         if (mensaje == "")
                         {
                             ViewBag.Usuario = NUsuario;
-                            TempData["Mail"] = NUsuario.Mail;
+                            TempData["email"] = NUsuario.Mail.ToString();
                             return RedirectToAction("SubirArchivo", "Registro");
                         }
                         else
@@ -111,18 +111,25 @@ namespace Proyecto.Controllers
         {
             string mens = "";
             Usuario NUsuario = new Usuario();
-            NUsuario.Mail = TempData["Mail"].ToString();
+            NUsuario.Mail = TempData["email"].ToString();
             NUsuario = NUsuario.TraerUsuario(ref mens);
             string fileName = file.FileName;
             string FileExtension = fileName.Substring(fileName.LastIndexOf('.') + 1).ToLower();
             if (file.ContentLength > 0 && file != null && (FileExtension == "xlsx" || FileExtension == "xlsm" || FileExtension == "xltx" || FileExtension == "xltm" || FileExtension == "xlam"))
             {
-                var path = Server.MapPath("~/BD/") + file.FileName;
-                var newpath = Server.MapPath("~/BD/") + NUsuario.ID + "-" + file.FileName;
-                file.SaveAs(path);
-                System.IO.File.Move(path, newpath);
-                NUsuario.BaseDeDatos = file.FileName;
-                NUsuario.CrearBaseDeDatos(ref mens);
+                try
+                {
+                    var path = Server.MapPath("~/BD/") + file.FileName;
+                    var newpath = Server.MapPath("~/BD/") + NUsuario.ID + "-" + file.FileName;
+                    file.SaveAs(path);
+                    System.IO.File.Move(path, newpath);
+                    NUsuario.BaseDeDatos = file.FileName;
+                    NUsuario.CrearBaseDeDatos(ref mens);
+                }
+                catch(Exception exc)
+                {
+                    mens = mens + "\n" + exc.Message;
+                }               
                 if (mens.Length == 0)
                 {
                     ViewBag.Usuario = NUsuario;
@@ -131,13 +138,13 @@ namespace Proyecto.Controllers
                 else
                 {
                     ViewBag.mensaje = mens;
-                    return RedirectToAction("Registro", "SubirArchivo");
+                    return View();
                 }
             }
             else
             {
                 ViewBag.mensaje = "\n" + "Ingresaste un Archivo invalido";
-                return RedirectToAction("Registro", "SubirArchivo");
+                return View();
             }
         }
         public ActionResult _TablaPartial()
