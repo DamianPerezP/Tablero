@@ -1,4 +1,10 @@
-﻿    <div id="wrapper">
+﻿@using System.Data;
+@{
+    DataSet currentDataSet = (DataSet)ViewBag.Nombres;
+}    
+
+
+<div id="wrapper">
                 <div id="page-wrapper">
             <div class="container-fluid">
                 <!-- /.row -->
@@ -34,14 +40,25 @@
     -->
     <script>
         $(function() {
-        Morris.Donut({
-            element: 'donut-example',
-            data: [
-              { label: "Download Sales", value: 12 },
-              { label: "In-Store Sales", value: 30 },
-              { label: "Mail-Order Sales", value: 20 }
-            ]
-        });
+            Morris.Donut({
+                element: 'donut-example',
+                data: [
+                     @for (var i = 0; i < currentDataSet.Tables[0].Rows.Count; i++)
+                     {
+                     <text>
+                            {   valor: '@currentDataSet.Tables[0].Rows[i][0]',
+                                valor2: '@currentDataSet.Tables[0].Rows[i][1]',
+                                valor3: @currentDataSet.Tables[0].Rows[i][2]
+                                }@((i < currentDataSet.Tables[0].Rows.Count - 1) ? "," : "")
+                        </text>
+                         }
+                ],
+
+                label: "Download Sales", value: 12,
+                label: "In-Store Sales", value: 30,
+                label: "Mail-Order Sales", value: 20,
+            
+            });
         });
 
     </script>

@@ -33,6 +33,7 @@ namespace Proyecto.Models
         public string FechaBD { get; set; }
         public string NombreDeHoja { get; set; }
         private string NombreArchivo = "bdeasybusiness";
+        public static string email;
         public String eMail;
         private MySqlConnection nCon;
         private void Conectar()
@@ -181,7 +182,7 @@ namespace Proyecto.Models
                 MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.Text;
                 strSQL += "UPDATE usuarios ";
-                strSQL += "SET BaseDeDatos = '" + BaseDeDatos + "' ";
+                strSQL += "SET BaseDeDatos = '" + this.BaseDeDatos + "' ";
                 strSQL += "WHERE Mail = '" + Mail + "';";
                 Consulta.CommandText = strSQL;
                 intRegsAffected = Consulta.ExecuteNonQuery();

@@ -37,7 +37,7 @@
     -->
     <script>
         $(function() {
-            // Area Chart
+           // Area Chart
             Morris.Area({
                 element: 'morris-area-1',
                 data: [
@@ -45,68 +45,17 @@
                     @for (var i = 0; i < currentDataSet.Tables[0].Rows.Count; i++) {
                         <text>
                             {   fecha: '@currentDataSet.Tables[0].Rows[i][0]',
-                                nombre: '@currentDataSet.Tables[0].Rows[i][1]',
-                                valor: @currentDataSet.Tables[0].Rows[i][2]
+                                valor: '@currentDataSet.Tables[0].Rows[i][1]',
+                                valor2: '@currentDataSet.Tables[0].Rows[i][2]',
+                                valor3: @currentDataSet.Tables[0].Rows[i][3]
                                 }@((i < currentDataSet.Tables[0].Rows.Count - 1) ? "," : "")
                         </text>
                             }
                 ],
-                //data: [
-                //{
-                //    hola: '2011 Q1',
-                //    lerner: 2666,
-                //    itouch: 2647,
-                //    ipad: null
-                //}, {
-                //    hola: '2010 Q2',
-                //    lerner: 2778,
-                //    ipad: 2294,
-                //    itouch: 2441
-                //}, {
-                //    hola: '2010 Q3',
-                //    lerner: 4912,
-                //    ipad: 1969,
-                //    itouch: 2501
-                //}, {
-                //    hola: '2010 Q4',
-                //    lerner: 3767,
-                //    ipad: 3597,
-                //    itouch: 5689
-                //}, {
-                //    hola: '2011 Q1',
-                //    lerner: 6810,
-                //    ipad: 1914,
-                //    itouch: 2293
-                //}, {
-                //    hola: '2011 Q2',
-                //    lerner: 5670,
-                //    ipad: 4293,
-                //    itouch: 1881
-                //}, {
-                //    hola: '2011 Q3',
-                //    lerner: 4820,
-                //    ipad: 3795,
-                //    itouch: 1588
-                //}, {
-                //    hola: '2011 Q4',
-                //    lerner: 15073,
-                //    ipad: 5967,
-                //    itouch: 5175
-                //}, {
-                //    hola: '2012 Q1',
-                //    lerner: 10687,
-                //    ipad: 4460,
-                //    itouch: 2028
-                //}, {
-                //    hola: '2012 Q2',
-                //    lerner: 8432,
-                //    ipad: 5713,
-                //    itouch: 1791
-                //}],
-                xkey: 'fecha',
-                ykeys: ['valor',','],
-                labels: ['nombre',','],
-                pointSize: 2,
+                xkey: ['fecha'],
+                ykeys: ['valor','valor2','valor3'],
+                labels: ['Facturacion Producto A','Facturacion Producto B','Facturacion Producto C'],
+                pointSize: 4,
                 hideHover: 'auto',
                 resize: true
             });
