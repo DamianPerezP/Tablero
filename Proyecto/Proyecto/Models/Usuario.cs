@@ -227,7 +227,7 @@ namespace Proyecto.Models
         }
         public DataSet CargarExcelEnDataSet()
         {
-            string connectionString = string.Format("provider=Microsoft.Jet.OLEDB.4.0; data source={0};Extended Properties=Excel 8.0;", BaseDeDatos);
+            string connectionString = string.Format("provider=Microsoft.Jet.OLEDB.4.0; data source={0};Extended Properties=Excel 8.0;", this.BaseDeDatos);
 
 
             DataSet data = new DataSet();

@@ -49,12 +49,13 @@ namespace Proyecto.Controllers
         }
         public ActionResult Inicio()
         {
-            String mens = "";
+            string mens = "";
             Usuario usu = new Usuario();
             usu.Mail = "sebilernerAgmail.com";
             usu= usu.TraerUsuario(ref mens);
-            String bdd = usu.BaseDeDatos;
-            usu.BaseDeDatos = @"C:\Tablero\Proyecto\Proyecto\BD\" + bdd;
+            string bdd = usu.BaseDeDatos;
+            string asd = @"C:\Tablero\Proyecto\Proyecto\BD\Librow.xls";
+            usu.BaseDeDatos = asd;  
             ViewBag.Nombres = usu.CargarExcelEnDataSet();
             ViewBag.mensaje = mens;         
             return View();
@@ -172,7 +173,7 @@ namespace Proyecto.Controllers
             usr.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\" + bdd;
             DataSet dsData = usr.CargarExcelEnDataSet();
             ViewBag.ElDataSet = dsData;
-            return PartialView();
+            return PartialView("_partialGrafico");
         }
         public ActionResult Principal()
         {
