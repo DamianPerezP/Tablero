@@ -5,11 +5,11 @@
 
 
 @{
-    var PartialGrafico = Html.Partial("_partialGrafico", (object)ViewBag.Nombres);
+    var PartialGrafico = Html.Partial("_partialGrafico", (object)ViewBag.ElDataSet);
 }
 @PartialGrafico
 @{
-    var PartialPanel = Html.Partial("_partialPanel");
+    var PartialPanel = Html.Partial("_partialPanel", (object)ViewBag.ElDataSet);
 }
 @PartialPanel
 @{

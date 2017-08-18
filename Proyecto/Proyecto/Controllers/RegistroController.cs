@@ -54,9 +54,9 @@ namespace Proyecto.Controllers
             usu.Mail = "sebilernerAgmail.com";
             usu= usu.TraerUsuario(ref mens);
             string bdd = usu.BaseDeDatos;
-            string asd = @"C:\Tablero\Proyecto\Proyecto\BD\Librow.xls";
+            string asd = @"C:\Tablero\Proyecto\Proyecto\BD\0-Librow.xls";
             usu.BaseDeDatos = asd;  
-            ViewBag.Nombres = usu.CargarExcelEnDataSet();
+            ViewBag.ElDataSet = usu.CargarExcelEnDataSet();
             ViewBag.mensaje = mens;         
             return View();
         }
