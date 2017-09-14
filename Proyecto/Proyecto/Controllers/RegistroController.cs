@@ -37,7 +37,7 @@ namespace Proyecto.Controllers
                     //TempData["email"] = MiUsser.Mail.ToString();
                     //HttpCookie cookie = new HttpCookie(MiUsser.Mail, "email");
                     //Response.Cookies.Add(cookie);
-                    return RedirectToAction("SubirArchivo", "Registro");
+                    return RedirectToAction("SubirArchivo", "Registro", new { mail = MiUsser.Mail });
                 }
             }
             else
@@ -47,15 +47,18 @@ namespace Proyecto.Controllers
                 return View();
             }
         }
-        public ActionResult Inicio()
+        public ActionResult Inicio( string mail, string NPath)
         {
             string mens = "";
             Usuario usu = new Usuario();
-            usu.Mail = "sebilernerAgmail.com";
+            usu.Mail = mail;
+            
+            //usu.Mail = "sebilernerAgmail.com";
             usu= usu.TraerUsuario(ref mens);
-            string bdd = usu.BaseDeDatos;
-            string asd = @"C:\Tablero\Proyecto\Proyecto\BD\0-Librow.xls";
-            usu.BaseDeDatos = asd;  
+            usu.Path = NPath;
+            //string bdd = usu.BaseDeDatos;
+            //string asd = @"C:\Tablero\Proyecto\Proyecto\BD\0-Librow.xls";
+            //usu.BaseDeDatos = asd;  
             ViewBag.ElDataSet = usu.CargarExcelEnDataSet();
             ViewBag.mensaje = mens;         
             return View();
@@ -103,7 +106,7 @@ namespace Proyecto.Controllers
                             //TempData["email"] = NUsuario.Mail.ToString();
                             //HttpCookie cookie = new HttpCookie(NUsuario.Mail, "email");
                             //Response.Cookies.Add(cookie);
-                            return RedirectToAction("SubirArchivo", "Registro");
+                            return RedirectToAction("SubirArchivo", "Registro", new { mail = NUsuario.Mail });
                         }
                         else
                         {
@@ -114,8 +117,9 @@ namespace Proyecto.Controllers
             }
 
         }
-        public ActionResult SubirArchivo()
+        public ActionResult SubirArchivo(string mail)
         {
+            TempData["Mail"] = mail;
             return View();
         }
         [HttpPost]
@@ -126,7 +130,8 @@ namespace Proyecto.Controllers
             //NUsuario.Mail = TempData["email"].ToString();
             // string tempCookie = Request.Cookies["email"].Value;
             //NUsuario.Mail = tempCookie;
-            NUsuario.Mail = "sebilernerAgmail.com";
+            //NUsuario.Mail = "sebilernerAgmail.com";
+            NUsuario.Mail = TempData["Mail"].ToString();
             string fileName = file.FileName;
             string FileExtension = fileName.Substring(fileName.LastIndexOf('.') + 1).ToLower();
             if (file.ContentLength > 0 && file != null && (FileExtension == "xlsx" || FileExtension == "xlsm" || FileExtension == "xltx" || FileExtension == "xltm" || FileExtension == "xlam") || FileExtension == "xls")
@@ -137,8 +142,9 @@ namespace Proyecto.Controllers
                     var newpath = Server.MapPath("~/BD/") + NUsuario.ID + "-" + file.FileName;
                     file.SaveAs(path);
                     System.IO.File.Move(path, newpath);
-                    NUsuario.Mail = "sebilernerAgmail.com";
+                    //NUsuario.Mail = "sebilernerAgmail.com";
                     NUsuario.BaseDeDatos = file.FileName;
+                    NUsuario.Path = newpath;
                     NUsuario.CrearBaseDeDatos(ref mens);
                 }
                 catch(Exception exc)
@@ -148,7 +154,7 @@ namespace Proyecto.Controllers
                 if (mens.Length == 0)
                 {
                     ViewBag.Usuario = NUsuario;
-                    return RedirectToAction("Inicio", "Registro");
+                    return RedirectToAction("Inicio", "Registro", new { mail = NUsuario.Mail, NPath = NUsuario.Path.ToString() });
                 }
                 else
                 {

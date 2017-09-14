@@ -30,6 +30,7 @@ namespace Proyecto.Models
         public string ReContraseña { get; set; }
         public HttpPostedFile BD { get; set; }
         public string BaseDeDatos { get; set; }
+        public string Path { get; set; }
         public string FechaBD { get; set; }
         public string NombreDeHoja { get; set; }
         private string NombreArchivo = "bdeasybusiness";
@@ -153,14 +154,20 @@ namespace Proyecto.Models
 
                 MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.Text;
-                strSQL += "SELECT BaseDeDatos";
+                strSQL += "SELECT BaseDeDatos ";
                 strSQL += "FROM usuarios";
-                strSQL += "WHERE Mail = '" + Mail + "';";
+                strSQL += " WHERE Mail = '" + Mail + "'";
                 Consulta.CommandText = strSQL;
                 MySqlDataReader drCon = Consulta.ExecuteReader();
-                if (drCon.HasRows == true && drCon["BaseDeDatos"].ToString() != "2")
+                if (drCon.HasRows == true)
                 {
-                    existe = true;
+                    while (drCon.Read())
+                    {
+                        if (drCon["BaseDeDatos"].ToString() != "2")
+                        {
+                            existe = true;
+                        }
+                    }
                 }
                 nCon.Close();
 
@@ -227,7 +234,7 @@ namespace Proyecto.Models
         }
         public DataSet CargarExcelEnDataSet()
         {
-            string connectionString = string.Format("provider=Microsoft.Jet.OLEDB.4.0; data source={0};Extended Properties=Excel 8.0;", this.BaseDeDatos);
+            string connectionString = string.Format("provider=Microsoft.Jet.OLEDB.4.0; data source={0};Extended Properties=Excel 8.0;", this.Path);
 
 
             DataSet data = new DataSet();
