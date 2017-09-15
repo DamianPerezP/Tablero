@@ -420,6 +420,8 @@
     <Content Include="Views\Shared\_TablaPartial.cshtml" />
     <Content Include="Views\Shared\_PartialSubir.cshtml" />
     <Content Include="Views\Shared\_partialPanel.cshtml" />
+    <Content Include="Views\Registro\Elegir.cshtml" />
+    <Content Include="Views\Shared\Elegir.cshtml" />
     <None Include="Views\Shared\_PartialPrincipal.cshtml" />
   </ItemGroup>
   <ItemGroup>

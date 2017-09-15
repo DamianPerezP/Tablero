@@ -185,5 +185,17 @@ namespace Proyecto.Controllers
         {
             return View();
         }
+        public ActionResult Elegir()
+        {
+            String mens = "";
+            Usuario usr = new Usuario();
+            usr.Mail = "sebilernerAgmail.com";
+            usr = usr.TraerUsuario(ref mens);
+            String bdd = usr.BaseDeDatos;
+            usr.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\" + bdd;
+            DataSet dsData = usr.CargarExcelEnDataSet();
+            ViewBag.ElDataSet = dsData;
+            return PartialView("Elegir");
+        }
     }
 }
