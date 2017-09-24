@@ -1,26 +1,18 @@
 ﻿@using System.Data;
+@using Proyecto.Models
+@model Usuario
 @{
     ViewBag.Title = "Inicio";
     DataSet ds = ((DataSet)ViewBag.ElDataSet);
 }
-<table>
-    <thead>
-        <tr>
-            @foreach (DataColumn col in ds.Tables[0].Columns)
-            {
-                <th>@col.ColumnName</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (DataRow row in ds.Tables[0].Rows)
-        {
-            <tr>
-                @foreach (DataColumn col in ds.Tables[0].Columns)
-                {
-                    <td>@row[col.ColumnName]</td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+
+
+
+
+
+        <div class="container-fluid">
+
+            @Html.ListBoxFor(x => x.)
+            @Html.ListBoxFor(m => m.IncludeGuestsArrivedInTimeframeYears, Model.TimeframeYears)
+        </div>
+

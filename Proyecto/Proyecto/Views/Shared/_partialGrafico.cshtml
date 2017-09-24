@@ -1,6 +1,7 @@
 ﻿@using System.Data;
 @{
     DataSet currentDataSet = (DataSet)ViewBag.ElDataSet;
+    String[] vecLab = new String[(currentDataSet.Tables[0].Rows.Count) - 1];
 }
     <div id="wrapper">
                 <div id="page-wrapper">
@@ -43,17 +44,21 @@
                 data: [
 
                     @for (var i = 0; i < currentDataSet.Tables[0].Rows.Count; i++) {
+                      @{vecLab[i] = "Facturacion Producto " + (i + 1).ToString()}
                         <text>
-                            {   fecha: '@currentDataSet.Tables[0].Rows[i][0]',
+                            {
+
+                                fecha: '@currentDataSet.Tables[0].Rows[i][0]',
                                 valor: '@currentDataSet.Tables[0].Rows[i][1]',
                                 valor2: '@currentDataSet.Tables[0].Rows[i][2]',
+                                valor3: '@currentDataSet.Tables[0].Rows[i][3]',
                                 }@((i < currentDataSet.Tables[0].Rows.Count - 1) ? "," : "")
                         </text>
-                            }
+                          }
                 ],
                 xkey: ['fecha'],
-                ykeys: ['valor','valor2','valor3'],
-                labels: ['Facturacion Producto A','Facturacion Producto B','Facturacion Producto C'],
+                ykeys: ['valor', 'valor2', 'valor3'],
+                labels: @{vecLab.},
                 pointSize: 4,
                 hideHover: 'auto',
                 resize: true

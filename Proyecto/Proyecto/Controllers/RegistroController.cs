@@ -19,7 +19,8 @@ namespace Proyecto.Controllers
         [HttpPost]
         public ActionResult Login(Usuario NUsuario)
         {
-            Usuario MiUsser = NUsuario;
+            Usuario MiUsser = new Usuario();
+            MiUsser = NUsuario;
             string mens = "";
             bool Existe = MiUsser.Login(ref mens);
             if (Existe == true)
@@ -30,7 +31,9 @@ namespace Proyecto.Controllers
                     //TempData["email"] = MiUsser.Mail.ToString();
                     //HttpCookie cookie = new HttpCookie(MiUsser.Mail, "email");
                     //Response.Cookies.Add(cookie);
-                    return RedirectToAction("Inicio", "Registro");
+                    Usuario NUser = new Usuario();
+                    NUser = MiUsser.TraerUsuario(ref mens);
+                    return RedirectToAction("Inicio", "Registro", new { mail = NUser.Mail, NPath = NUser.Path });
                 }
                 else
                 {
@@ -168,34 +171,36 @@ namespace Proyecto.Controllers
                 return View();
             }
         }
-        public ActionResult _TablaPartial()
+        public ActionResult ElegirExc(string mail, string NPath)
         {
-            String mens = "";
-            Usuario usr = new Usuario();
-            //usr = ViewBag.Usuario;
-            usr.Mail = "sebilernerAgmail.com";
-            usr = usr.TraerUsuario(ref mens);
-            String bdd = usr.BaseDeDatos;
-            usr.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\" + bdd;
-            DataSet dsData = usr.CargarExcelEnDataSet();
-            ViewBag.ElDataSet = dsData;
-            return PartialView("_partialGrafico");
+
+            string mens = "";
+            Usuario usu = new Usuario();
+            usu.Mail = mail;
+            //usu.Mail = "sebilernerAgmail.com";
+            usu = usu.TraerUsuario(ref mens);
+            usu.Path = NPath;
+            //string bdd = usu.BaseDeDatos;
+            //string asd = @"C:\Tablero\Proyecto\Proyecto\BD\0-Librow.xls";
+            //usu.BaseDeDatos = asd;  
+            ViewBag.ElDataSet = usu.CargarExcelEnDataSet();
+            ViewBag.mensaje = mens;
+            return View();
+
+            //string mens = "";
+            //Usuario usr = new Usuario();
+            ////usr = ViewBag.Usuario;
+            //usr.Mail = "sebilernerAgmail.com";
+            //usr = usr.TraerUsuario(ref mens);
+            //string bdd = usr.BaseDeDatos;
+            //usr.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\" + bdd;
+            //DataSet dsData = usr.CargarExcelEnDataSet();
+            //ViewBag.ElDataSet = dsData;
+            //return PartialView("_partialGrafico");
         }
         public ActionResult Principal()
         {
             return View();
-        }
-        public ActionResult Elegir()
-        {
-            String mens = "";
-            Usuario usr = new Usuario();
-            usr.Mail = "sebilernerAgmail.com";
-            usr = usr.TraerUsuario(ref mens);
-            String bdd = usr.BaseDeDatos;
-            usr.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\" + bdd;
-            DataSet dsData = usr.CargarExcelEnDataSet();
-            ViewBag.ElDataSet = dsData;
-            return PartialView("Elegir");
         }
     }
 }
