@@ -6,13 +6,18 @@
     DataSet ds = ((DataSet)ViewBag.ElDataSet);
 }
 
-
+@{
+    String titulo;
+    List<String> lstColumnas = new List<string>();
+    @foreach (DataColumn dc in ds.Tables[0].Columns)
+    {
+        titulo = dc[0].ToString();
+    }
 
 
 
         <div class="container-fluid">
 
-            @Html.ListBoxFor(x => x.)
-            @Html.ListBoxFor(m => m.IncludeGuestsArrivedInTimeframeYears, Model.TimeframeYears)
+            @Html.DropDownListFor(x =>x.valor1, )
         </div>
 

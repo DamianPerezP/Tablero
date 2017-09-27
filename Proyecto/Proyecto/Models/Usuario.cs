@@ -36,6 +36,9 @@ namespace Proyecto.Models
         private string NombreArchivo = "bdeasybusiness";
         public static string email;
         public String eMail;
+        public static String valor1;
+        public static String valor2;
+        public static String valor3;
         private MySqlConnection nCon;
         private void Conectar()
         {
