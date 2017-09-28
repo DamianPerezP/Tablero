@@ -35,10 +35,10 @@ namespace Proyecto.Models
         public string NombreDeHoja { get; set; }
         private string NombreArchivo = "bdeasybusiness";
         public static string email;
-        public String eMail;
-        public static String valor1;
-        public static String valor2;
-        public static String valor3;
+        public string eMail;
+        public string valor1 { get; set; }
+        public string valor2 { get; set; }
+        public string valor3 { get; set; }
         private MySqlConnection nCon;
         private void Conectar()
         {
@@ -262,16 +262,7 @@ namespace Proyecto.Models
             return data;
         }
 
-        public List<string> ListaFila(DataSet data)
-        {
-            
-            
-            for (int i = 0; i < data.Tables[0].Rows.Count; i++)
-            {
-                ListaFila().Add(data.Tables[0].Rows[i].ToString());
-            }
-            return ListaFila();
-        }
+       
            private string[] GetExcelSheetNames(string connectionString)
         {
             OleDbConnection con = null;
@@ -285,7 +276,7 @@ namespace Proyecto.Models
                 return null;
             }
 
-            String[] excelSheetNames = new String[dt.Rows.Count];
+            string[] excelSheetNames = new string[dt.Rows.Count];
             int i = 0;
 
             foreach (DataRow row in dt.Rows)
