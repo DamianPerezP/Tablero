@@ -1,7 +1,11 @@
 ﻿@using System.Data;
 @{
     DataSet currentDataSet = (DataSet)ViewBag.ElDataSet;
+<<<<<<< HEAD
     //string[] vecLab = new string[(currentDataSet.Tables[0].Rows.Count) - 1];
+=======
+    String[] vecLab = new String[(currentDataSet.Tables[0].Rows.Count) - 1];
+>>>>>>> bfaf50b6ce162429c7491b40038df1323e7b97d7
 }
     <div id="wrapper">
                 <div id="page-wrapper">
@@ -42,6 +46,7 @@
             Morris.Area({
                 element: 'morris-area-1',
                 data: [
+<<<<<<< HEAD
         
                     @{for (var i = 0; i < currentDataSet.Tables[0].Rows.Count; i++) {
                         <text>
@@ -51,13 +56,30 @@
                                 valor: '@currentDataSet.Tables[0].Rows[i][1]',
                                 valor2: '@currentDataSet.Tables[0].Rows[i][2]'
                             }@((i < currentDataSet.Tables[0].Rows.Count) ? "," : "")
+=======
+
+                    @{for (var i = 0; i < currentDataSet.Tables[0].Rows.Count; i++) {
+                        <text>
+                            {
+                                @{vecLab[i] = "Facturacion Producto " + (i + 1).ToString();}
+                                fecha: '@currentDataSet.Tables[0].Rows[i][0]',
+                                valor: '@currentDataSet.Tables[0].Rows[i][1]',
+                                valor2: '@currentDataSet.Tables[0].Rows[i][2]',
+                                valor3: '@currentDataSet.Tables[0].Rows[i][3]',
+                                }@((i < currentDataSet.Tables[0].Rows.Count) ? "," : "")
+>>>>>>> bfaf50b6ce162429c7491b40038df1323e7b97d7
                         </text>
                               }
                           }
                 ],
                 xkey: ['fecha'],
+<<<<<<< HEAD
                 ykeys: ['valor', 'valor2'],
                 labels: ['Producto 1', 'Producto 2', 'Producto 3'],
+=======
+                ykeys: ['valor', 'valor2', 'valor3'],
+                labels: @{vecLab.},
+>>>>>>> bfaf50b6ce162429c7491b40038df1323e7b97d7
                 pointSize: 4,
                 hideHover: 'auto',
                 resize: true
