@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Elegir Excel";
+}
+
+@{
+    var PartialTablero = Html.Partial("_TablaPartial");
+}
+@PartialTablero
+
+@section scripts{
+    <script src="~/JS/JavaScript.js"></script>
+}
+@section _PartialHead{
+    @{ Html.RenderPartial("_PartialHead");  }
+}
+
+

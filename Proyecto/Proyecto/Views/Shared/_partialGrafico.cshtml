@@ -1,6 +1,7 @@
 ﻿@using System.Data;
 @{
     DataSet currentDataSet = (DataSet)ViewBag.ElDataSet;
+    //string[] vecLab = new string[(currentDataSet.Tables[0].Rows.Count) - 1];
 }
     <div id="wrapper">
                 <div id="page-wrapper">
@@ -37,30 +38,32 @@
     -->
     <script>
         $(function() {
-           // Area Chart
+            // Area Chart
             Morris.Area({
                 element: 'morris-area-1',
                 data: [
-
-                    @for (var i = 0; i < currentDataSet.Tables[0].Rows.Count; i++) {
+        
+                    @{for (var i = 0; i < currentDataSet.Tables[0].Rows.Count; i++) {
                         <text>
-                            {   fecha: '@currentDataSet.Tables[0].Rows[i][0]',
+                            {
+                                //{vecLab[i] = "Facturacion Producto " + (i + 1).ToString();}
+                                fecha: '@currentDataSet.Tables[0].Rows[i][0]',
                                 valor: '@currentDataSet.Tables[0].Rows[i][1]',
-                                valor2: '@currentDataSet.Tables[0].Rows[i][2]',
-                                }@((i < currentDataSet.Tables[0].Rows.Count - 1) ? "," : "")
+                                valor2: '@currentDataSet.Tables[0].Rows[i][2]'
+                            }@((i < currentDataSet.Tables[0].Rows.Count) ? "," : "")
                         </text>
-                            }
+                              }
+                          }
                 ],
                 xkey: ['fecha'],
-                ykeys: ['valor','valor2','valor3'],
-                labels: ['Facturacion Producto A','Facturacion Producto B','Facturacion Producto C'],
+                ykeys: ['valor', 'valor2'],
+                labels: ['Producto 1', 'Producto 2', 'Producto 3'],
                 pointSize: 4,
                 hideHover: 'auto',
                 resize: true
+
             });
         });
-
-
     </script>
 
     

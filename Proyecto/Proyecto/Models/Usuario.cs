@@ -35,7 +35,10 @@ namespace Proyecto.Models
         public string NombreDeHoja { get; set; }
         private string NombreArchivo = "bdeasybusiness";
         public static string email;
-        public String eMail;
+        public string eMail;
+        public string valor1 { get; set; }
+        public string valor2 { get; set; }
+        public string valor3 { get; set; }
         private MySqlConnection nCon;
         private void Conectar()
         {
@@ -105,10 +108,10 @@ namespace Proyecto.Models
                 //  VALUES ('pepe@pepe.comar', 'Nombre', 'Apellido', 'nombreempo', 'passwd', 'sss', '2', '2015-05-05');
 
                 strSQL += "INSERT INTO usuarios";
-                strSQL += " (Mail, NombreUsuario, ApellidoUsuario, NombreEmpresa, Password, BaseDeDatos, FechaBD)";
+                strSQL += " (Mail, NombreUsuario, ApellidoUsuario, NombreEmpresa, Password, BaseDeDatos, FechaBD, Path)";
                 strSQL += " VALUES ";
                 //strSQL += " ('"+ this.Mail + "', '"+ this.NombreUsuario + "', '"+ this.Apellido +"', '"+this.NombreEmpresa + "', '"+ this.Contraseña + "', '', ''); ";
-                strSQL += String.Format(" ('{0}', '{1}', '{2}', '{3}', '{4}', '2' ,'2015-06-04'); ",
+                strSQL += String.Format(" ('{0}', '{1}', '{2}', '{3}', '{4}', '2' ,'2015-06-04', 'no hay'); ",
                    //                  mailx,
                    this.Mail,
                    this.NombreUsuario,
@@ -180,16 +183,18 @@ namespace Proyecto.Models
         }
         public void CrearBaseDeDatos(ref string mens)
         {
+            String pa = this.Path;
+            pa = pa.Replace("\\", ".Q.");
             int intRegsAffected = 0;
             string strSQL = "";
             try
             {
                 Conectar();
-
+                
                 MySqlCommand Consulta = nCon.CreateCommand();
                 Consulta.CommandType = CommandType.Text;
                 strSQL += "UPDATE usuarios ";
-                strSQL += "SET BaseDeDatos = '" + this.BaseDeDatos + "' ";
+                strSQL += "SET BaseDeDatos = '" + this.BaseDeDatos + "' , Path = '" + pa+"' ";
                 strSQL += "WHERE Mail = '" + Mail + "';";
                 Consulta.CommandText = strSQL;
                 intRegsAffected = Consulta.ExecuteNonQuery();
@@ -223,7 +228,11 @@ namespace Proyecto.Models
                     NUsu.NombreEmpresa = DrConsulta["NombreEmpresa"].ToString();
                     NUsu.Contraseña = DrConsulta["Password"].ToString();
                     NUsu.BaseDeDatos = DrConsulta["BaseDeDatos"].ToString();
+                    NUsu.ID = Convert.ToInt32(DrConsulta["IdUsuario"].ToString());
+                    NUsu.Path = DrConsulta["Path"].ToString();
+                    
                 }
+                NUsu.Path = NUsu.Path.Replace(".Q.", "\\");
                 nCon.Close();
             }
             catch (Exception exc)
@@ -252,13 +261,8 @@ namespace Proyecto.Models
                 }
             return data;
         }
-        public void CargarDGVEnVB(DataSet ds, String NombreTabla)
-        {
-            //DataGridView DataGridView1 = new DataGridView();
-            //DataGridView1.AutoGenerateColumns = true;
-            //DataGridView1.DataSource = ds;
-            //DataGridView1.DataMember = NombreTabla;
-        }
+
+       
            private string[] GetExcelSheetNames(string connectionString)
         {
             OleDbConnection con = null;
@@ -272,7 +276,7 @@ namespace Proyecto.Models
                 return null;
             }
 
-            String[] excelSheetNames = new String[dt.Rows.Count];
+            string[] excelSheetNames = new string[dt.Rows.Count];
             int i = 0;
 
             foreach (DataRow row in dt.Rows)

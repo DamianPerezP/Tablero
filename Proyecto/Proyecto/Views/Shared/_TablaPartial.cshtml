@@ -1,26 +1,35 @@
 ﻿@using System.Data;
+@using Proyecto.Models
+@model Usuario
 @{
-    ViewBag.Title = "Inicio";
+    ViewBag.Title = "Elegir";
     DataSet ds = ((DataSet)ViewBag.ElDataSet);
-}
-<table>
-    <thead>
-        <tr>
-            @foreach (DataColumn col in ds.Tables[0].Columns)
-            {
-                <th>@col.ColumnName</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (DataRow row in ds.Tables[0].Rows)
+    string titulo;
+    List<SelectListItem> lstColumnas = new List<SelectListItem>();
+    for (int i = 0; i < ds.Tables[0].Columns.Count; i++)
+    {
+        titulo = ds.Tables[0].Rows[0][i].ToString();
+        lstColumnas.Add(new SelectListItem()
         {
-            <tr>
-                @foreach (DataColumn col in ds.Tables[0].Columns)
-                {
-                    <td>@row[col.ColumnName]</td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+            Text = titulo,
+            Value = titulo
+        });
+    }
+}
+@using (Html.BeginForm("ElegirExc", "Registro", FormMethod.Post, new { @class = "form-signin", enctype = "multipart/form-data" }))
+{
+    <div class="container-fluid">
+        <h1>Elija tres columnas con las cuales se armaran sus graficos \n Las columnas seleccionadas no pueden ser iguales</h1>
+        <h1 class="form-signin-heading">Login</h1><br />
+        <h2>Columna 1</h2>
+        @Html.DropDownListFor(x => x.valor1, lstColumnas, "-- Seleccione columna --")
+        <h2>Columna 2</h2>
+        @Html.DropDownListFor(x => x.valor2, lstColumnas, "-- Seleccione columna --")
+        <h2>Columna 3</h2>
+        @Html.DropDownListFor(x => x.valor3, lstColumnas, "-- Seleccione columna --")
+    </div>
+    <br/>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Siguiente</button><br />
+}
+    <h3>@ViewBag.mensaje</h3>
+

@@ -19,7 +19,8 @@ namespace Proyecto.Controllers
         [HttpPost]
         public ActionResult Login(Usuario NUsuario)
         {
-            Usuario MiUsser = NUsuario;
+            Usuario MiUsser = new Usuario();
+            MiUsser = NUsuario;
             string mens = "";
             bool Existe = MiUsser.Login(ref mens);
             if (Existe == true)
@@ -30,7 +31,9 @@ namespace Proyecto.Controllers
                     //TempData["email"] = MiUsser.Mail.ToString();
                     //HttpCookie cookie = new HttpCookie(MiUsser.Mail, "email");
                     //Response.Cookies.Add(cookie);
-                    return RedirectToAction("Inicio", "Registro");
+                    Usuario NUser = new Usuario();
+                    NUser = MiUsser.TraerUsuario(ref mens);
+                    return RedirectToAction("Inicio", "Registro", new { mail = NUser.Mail, NPath = NUser.Path });
                 }
                 else
                 {
@@ -47,19 +50,10 @@ namespace Proyecto.Controllers
                 return View();
             }
         }
-        public ActionResult Inicio( string mail, string NPath)
+        public ActionResult Inicio()
         {
             string mens = "";
-            Usuario usu = new Usuario();
-            usu.Mail = mail;
-            
-            //usu.Mail = "sebilernerAgmail.com";
-            usu= usu.TraerUsuario(ref mens);
-            usu.Path = NPath;
-            //string bdd = usu.BaseDeDatos;
-            //string asd = @"C:\Tablero\Proyecto\Proyecto\BD\0-Librow.xls";
-            //usu.BaseDeDatos = asd;  
-            ViewBag.ElDataSet = usu.CargarExcelEnDataSet();
+        //    ViewBag.ElDataSet = TempData["nTabla"];
             ViewBag.mensaje = mens;         
             return View();
         }
@@ -126,12 +120,14 @@ namespace Proyecto.Controllers
         public ActionResult SubirArchivo(HttpPostedFileBase file)
         {
             string mens = "";
+            Usuario NUsuario2 = new Usuario();
             Usuario NUsuario = new Usuario();
             //NUsuario.Mail = TempData["email"].ToString();
             // string tempCookie = Request.Cookies["email"].Value;
             //NUsuario.Mail = tempCookie;
             //NUsuario.Mail = "sebilernerAgmail.com";
-            NUsuario.Mail = TempData["Mail"].ToString();
+            NUsuario2.Mail = TempData["Mail"].ToString();
+            NUsuario = NUsuario2.TraerUsuario(ref mens);
             string fileName = file.FileName;
             string FileExtension = fileName.Substring(fileName.LastIndexOf('.') + 1).ToLower();
             if (file.ContentLength > 0 && file != null && (FileExtension == "xlsx" || FileExtension == "xlsm" || FileExtension == "xltx" || FileExtension == "xltm" || FileExtension == "xlam") || FileExtension == "xls")
@@ -154,7 +150,7 @@ namespace Proyecto.Controllers
                 if (mens.Length == 0)
                 {
                     ViewBag.Usuario = NUsuario;
-                    return RedirectToAction("Inicio", "Registro", new { mail = NUsuario.Mail, NPath = NUsuario.Path.ToString() });
+                    return RedirectToAction("ElegirExc", "Registro", new { mail = NUsuario.Mail, NPath = NUsuario.Path.ToString() });
                 }
                 else
                 {
@@ -168,18 +164,76 @@ namespace Proyecto.Controllers
                 return View();
             }
         }
-        public ActionResult _TablaPartial()
+        public ActionResult ElegirExc(string mail, string NPath)
         {
-            String mens = "";
-            Usuario usr = new Usuario();
-            //usr = ViewBag.Usuario;
-            usr.Mail = "sebilernerAgmail.com";
-            usr = usr.TraerUsuario(ref mens);
-            String bdd = usr.BaseDeDatos;
-            usr.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\" + bdd;
-            DataSet dsData = usr.CargarExcelEnDataSet();
-            ViewBag.ElDataSet = dsData;
-            return PartialView("_partialGrafico");
+            string mens = "";
+            Usuario usu = new Usuario();
+            usu.Mail = mail;
+            //usu.Mail = "sebilernerAgmail.com";
+            usu = usu.TraerUsuario(ref mens);
+            usu.Path = NPath;
+            //string bdd = usu.BaseDeDatos;
+            //string asd = @"C:\Tablero\Proyecto\Proyecto\BD\0-Librow.xls";
+            //usu.BaseDeDatos = asd;  
+            ViewBag.ElDataSet = usu.CargarExcelEnDataSet();
+            TempData["dataset"] = ViewBag.ElDataSet;
+            ViewBag.mensaje = mens;
+            return View();
+
+            //string mens = "";
+            //Usuario usr = new Usuario();
+            ////usr = ViewBag.Usuario;
+            //usr.Mail = "sebilernerAgmail.com";
+            //usr = usr.TraerUsuario(ref mens);
+            //string bdd = usr.BaseDeDatos;
+            //usr.BaseDeDatos = @"C:\Tablero\Proyecto\BaseDeDatos\" + bdd;
+            //DataSet dsData = usr.CargarExcelEnDataSet();
+            //ViewBag.ElDataSet = dsData;
+            //return PartialView("_partialGrafico");
+        }
+        [HttpPost]
+        public ActionResult ElegirExc(Usuario usu)
+        {
+            ViewBag.mensaje = "";
+            if (usu.valor1 == null || usu.valor2 == null || usu.valor3 == null || usu.valor1 == usu.valor2 || usu.valor2 == usu.valor3 || usu.valor1 == usu.valor3)
+            {
+                ViewBag.mensaje = "Alguno de los contenidos de las columnas es incorrecto, vuelva a intentarlo";
+                return View();
+            }
+            else
+            {
+                DataSet ds = new DataSet();
+                ViewBag.DataSet = TempData["dataset"];
+                DataSet dsViejo = ViewBag.DataSet;
+                DataSet dsviejo2 = dsViejo;
+                ds.Tables.Add(new DataTable());
+                string titulo;
+                try
+                {
+                    for (int i = 0; i < dsviejo2.Tables[0].Columns.Count; i++)
+                    {
+                        titulo = dsviejo2.Tables[0].Rows[0][i].ToString();
+                        if (titulo != usu.valor1 && titulo != usu.valor2 && titulo != usu.valor3)
+                        {
+                            dsViejo.Tables[0].Columns.RemoveAt(i);
+                        }
+                    }
+                }
+                catch(Exception exc)
+                {
+                    ViewBag.mensaje = exc.Message;
+                }
+                if (ViewBag.mensaje == "")
+                {
+                    TempData["nTabla"] = dsViejo;
+                    ViewBag.ElDataSet = dsViejo;
+                    return View("Inicio");
+                }
+                else
+                {
+                    return View();
+                }
+            }
         }
         public ActionResult Principal()
         {
