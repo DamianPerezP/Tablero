@@ -1228,3 +1228,5 @@ E:\Tablero\Proyecto\Proyecto\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 E:\Tablero\Proyecto\Proyecto\obj\Debug\Proyecto.csprojResolveAssemblyReference.cache
 E:\Tablero\Proyecto\Proyecto\obj\Debug\Proyecto.dll
 E:\Tablero\Proyecto\Proyecto\obj\Debug\Proyecto.pdb
+C:\Tablero\Proyecto\Proyecto\bin\MySql.Data.dll
+C:\Tablero\Proyecto\Proyecto\bin\MySql.Data.xml

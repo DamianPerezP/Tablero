@@ -5,14 +5,16 @@
     ViewBag.Title = "Elegir";
     DataSet ds = ((DataSet)ViewBag.ElDataSet);
     string titulo;
+    string valor;
     List<SelectListItem> lstColumnas = new List<SelectListItem>();
     for (int i = 0; i < ds.Tables[0].Columns.Count; i++)
     {
-        titulo = ds.Tables[0].Rows[0][i].ToString();
+        titulo = ds.Tables[0].Columns[i].ToString();
+        valor = ds.Tables[0].Rows[0][i].ToString();
         lstColumnas.Add(new SelectListItem()
         {
             Text = titulo,
-            Value = titulo
+            Value = valor
         });
     }
     List<SelectListItem> lstGraficos = new List<SelectListItem>();
@@ -46,13 +48,13 @@
         <h1 class="form-signin-heading">Elegir columna</h1><br />
         <h3>Elija tres columnas con las cuales se armaran sus graficos \n Las columnas seleccionadas no pueden ser iguales</h3>
         <h2>Grafico</h2>
-        @Html.DropDownListFor(x => x.grafico,lstGraficos , "-- Seleccione Grafico --")
+        @Html.DropDownListFor(x => x.grafico, lstGraficos, "-- Seleccione Grafico --", new { @class = "form-control" })
         <h2>Columna 1</h2>
-        @Html.DropDownListFor(x => x.valor1, lstColumnas, "-- Seleccione columna --")
+        @Html.DropDownListFor(x => x.valor1, lstColumnas, "-- Seleccione columna --", new { @class = "form-control" })
         <h2>Columna 2</h2>
-        @Html.DropDownListFor(x => x.valor2, lstColumnas, "-- Seleccione columna --")
+        @Html.DropDownListFor(x => x.valor2, lstColumnas, "-- Seleccione columna --", new { @class = "form-control" })
         <h2>Columna 3</h2>
-        @Html.DropDownListFor(x => x.valor3, lstColumnas, "-- Seleccione columna --")
+        @Html.DropDownListFor(x => x.valor3, lstColumnas, "-- Seleccione columna --", new { @class = "form-control" })
     </div>
     <br/>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Siguiente</button><br />
