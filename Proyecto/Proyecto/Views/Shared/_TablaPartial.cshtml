@@ -15,20 +15,38 @@
             Value = titulo
         });
     }
+    List<SelectListItem> lstGraficos = new List<SelectListItem>();
+    lstGraficos.Add(new SelectListItem()
+    {
+        Text = "Grilla",
+        Value = "Grilla"
+    }
+);
+    lstGraficos.Add(new SelectListItem()
+    {
+        Text = "Torta",
+        Value = "Torta"
+    }
+    );
 }
-<<<<<<< HEAD
-=======
-
-
-
-
-
->>>>>>> bfaf50b6ce162429c7491b40038df1323e7b97d7
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/Login.css">
+</head>
+<script src="~/js/jquery.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="~/js/bootstrap.min.js"></script>
+<script src="~/js/js.js"></script>
+<!-- Morris Charts JavaScript -->
+<script src="~/js/plugins/morris/raphael.min.js"></script>
+<script src="~/js/plugins/morris/morris.min.js"></script>
 @using (Html.BeginForm("ElegirExc", "Registro", FormMethod.Post, new { @class = "form-signin", enctype = "multipart/form-data" }))
 {
     <div class="container-fluid">
-        <h1>Elija tres columnas con las cuales se armaran sus graficos \n Las columnas seleccionadas no pueden ser iguales</h1>
-        <h1 class="form-signin-heading">Login</h1><br />
+        
+        <h1 class="form-signin-heading">Elegir columna</h1><br />
+        <h3>Elija tres columnas con las cuales se armaran sus graficos \n Las columnas seleccionadas no pueden ser iguales</h3>
+        <h2>Grafico</h2>
+        @Html.DropDownListFor(x => x.grafico,lstGraficos , "-- Seleccione Grafico --")
         <h2>Columna 1</h2>
         @Html.DropDownListFor(x => x.valor1, lstColumnas, "-- Seleccione columna --")
         <h2>Columna 2</h2>

@@ -5,13 +5,17 @@
 
 
 @{
-    var PartialGrafico = Html.Partial("_partialGrafico", (object)ViewBag.ElDataSet);
-}
+    if (ViewBag.grafico == "Grilla")
+    {
+        var PartialGrafico = Html.Partial("_partialGrafico", (object)ViewBag.ElDataSet);
 @PartialGrafico
-@{
-    var PartialPanel = Html.Partial("_partialPanel", (object)ViewBag.ElDataSet);
-}
+    }
+    else
+    {
+        var PartialPanel = Html.Partial("_partialPanel", (object)ViewBag.ElDataSet);
 @PartialPanel
+        }
+    }
 @{
     //var PartialTabla = Html.Partial("_TablaPartial");
 }

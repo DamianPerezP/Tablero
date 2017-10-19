@@ -39,6 +39,7 @@ namespace Proyecto.Models
         public string valor1 { get; set; }
         public string valor2 { get; set; }
         public string valor3 { get; set; }
+        public string grafico { get; set; }
         private MySqlConnection nCon;
         private void Conectar()
         {
@@ -47,7 +48,7 @@ namespace Proyecto.Models
                                                 "localhost",
                                                 NombreArchivo,
                                                 "root",
-                                                "root");
+                                                "");
             nCon = new MySqlConnection();
             nCon.ConnectionString = proovedor;
             nCon.Open();

@@ -33,7 +33,7 @@ namespace Proyecto.Controllers
                     //Response.Cookies.Add(cookie);
                     Usuario NUser = new Usuario();
                     NUser = MiUsser.TraerUsuario(ref mens);
-                    return RedirectToAction("Inicio", "Registro", new { mail = NUser.Mail, NPath = NUser.Path });
+                    return RedirectToAction("ElegirExc", "Registro", new { mail = NUser.Mail, NPath = NUser.Path });
                 }
                 else
                 {
@@ -50,17 +50,10 @@ namespace Proyecto.Controllers
                 return View();
             }
         }
-<<<<<<< HEAD
-        public ActionResult Inicio()
-        {
-            string mens = "";
-        //    ViewBag.ElDataSet = TempData["nTabla"];
-=======
         public ActionResult Inicio( DataSet ds)
         {
             string mens = "";
             ViewBag.ElDataSet = ds;
->>>>>>> bfaf50b6ce162429c7491b40038df1323e7b97d7
             ViewBag.mensaje = mens;         
             return View();
         }
@@ -212,7 +205,6 @@ namespace Proyecto.Controllers
                 DataSet ds = new DataSet();
                 ViewBag.DataSet = TempData["dataset"];
                 DataSet dsViejo = ViewBag.DataSet;
-<<<<<<< HEAD
                 DataSet dsviejo2 = dsViejo;
                 ds.Tables.Add(new DataTable());
                 string titulo;
@@ -224,17 +216,6 @@ namespace Proyecto.Controllers
                         if (titulo != usu.valor1 && titulo != usu.valor2 && titulo != usu.valor3)
                         {
                             dsViejo.Tables[0].Columns.RemoveAt(i);
-=======
-                string titulo;
-                try
-                {
-                    for (int i = 0; i < dsViejo.Tables[0].Columns.Count; i++)
-                    {
-                        titulo = dsViejo.Tables[0].Rows[0][i].ToString();
-                        if (titulo == usu.valor1 || titulo == usu.valor2 || titulo == usu.valor3)
-                        {
-                            ds.Tables[0].Columns.Add(dsViejo.Tables[0].Columns[i]);
->>>>>>> bfaf50b6ce162429c7491b40038df1323e7b97d7
                         }
                     }
                 }
@@ -244,13 +225,10 @@ namespace Proyecto.Controllers
                 }
                 if (ViewBag.mensaje == "")
                 {
-<<<<<<< HEAD
                     TempData["nTabla"] = dsViejo;
                     ViewBag.ElDataSet = dsViejo;
+                    ViewBag.grafico = usu.grafico;
                     return View("Inicio");
-=======
-                    return RedirectToAction("Inicio", "Registro", new { nTabla = ds });
->>>>>>> bfaf50b6ce162429c7491b40038df1323e7b97d7
                 }
                 else
                 {
